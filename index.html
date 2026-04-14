@@ -8,366 +8,156 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{
-  --bg:#080c14;--card:#0f1629;--border:#1a2340;--accent:#f59e0b;--green:#10b981;--red:#ef4444;
-  --blue:#3b82f6;--purple:#8b5cf6;--cyan:#06b6d4;--text:#e2e8f0;--muted:#64748b;--dim:#334155;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Sans SC','Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.mono{font-family:'IBM Plex Mono',monospace}
-.wrap{max-width:1280px;margin:0 auto;padding:20px 24px}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+:root{--bg:#080c14;--card:#0f1629;--border:#1a2340;--accent:#f59e0b;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--purple:#8b5cf6;--cyan:#06b6d4;--text:#e2e8f0;--muted:#64748b;--dim:#334155}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Noto Sans SC','Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}.mono{font-family:'IBM Plex Mono',monospace}
+.wrap{max-width:1340px;margin:0 auto;padding:20px 24px}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
 .header h1{font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header .sub{color:var(--muted);font-size:12px;margin-top:4px}
-.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;margin-right:6px}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px}
-.kpi .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.kpi .val{font-size:26px;font-weight:800;line-height:1.1}
-.kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;animation:fadeUp .5s ease both}
-.card-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.card-head span{font-weight:700;font-size:14px}
-.card-head .info{font-size:11px;color:var(--muted)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{padding:10px 14px;text-align:left;color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;background:#0a0f1f}
-td{padding:10px 14px;border-top:1px solid var(--border)}
-.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
-.tag-done{background:#10b98120;color:var(--green)}
-.tag-partial{background:#f59e0b20;color:var(--accent)}
-.progress-bar{width:70px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:8px}
-.progress-fill{height:100%;border-radius:3px;transition:width .6s ease}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-@media(max-width:768px){.grid-2{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
-.chart-wrap{padding:20px;position:relative;height:340px}
-.tabs{display:flex;gap:4px}
-.tabs button{padding:6px 14px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:var(--card);color:var(--muted);transition:all .2s}
-.tabs button.on{background:var(--accent);color:var(--bg)}
-.store-btn{padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;transition:all .2s}
-.store-btn.on{border-color:var(--accent);color:var(--accent);background:#f59e0b10}
-.store-btn:hover{border-color:var(--accent)}
-.footer{display:flex;justify-content:space-between;padding:10px 14px;font-size:10px;color:var(--dim);background:#0a0f1a;border-radius:8px;border:1px solid #111827;margin-top:20px;flex-wrap:wrap;gap:8px}
-.loading{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
-.err{color:var(--red);padding:20px;font-size:13px}
+.header .sub{color:var(--muted);font-size:12px;margin-top:4px}.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;margin-right:6px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px}.kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.kpi .val{font-size:24px;font-weight:800;line-height:1.1}.kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;animation:fadeUp .5s ease both}
+.card-head{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.card-head span{font-weight:700;font-size:13px}.card-head .info{font-size:11px;color:var(--muted);font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:12px}th{padding:8px 12px;text-align:left;color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px;background:#0a0f1f;cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:var(--accent)}td{padding:8px 12px;border-top:1px solid var(--border)}
+.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;white-space:nowrap}
+.tag-done{background:#10b98120;color:var(--green)}.tag-partial{background:#f59e0b20;color:var(--accent)}.tag-star{background:#052e16;color:#4ade80}.tag-ok{background:#0c2d1b;color:#86efac}
+.tag-warn{background:#422006;color:#fbbf24}.tag-waste{background:#450a0a;color:#f87171}.tag-cold{background:#1e1b4b;color:#a78bfa}.tag-high{background:#ef444420;color:var(--red)}
+.pb{width:60px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px}.pb-f{height:100%;border-radius:2px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}@media(max-width:900px){.grid-2{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+.chart-wrap{padding:16px;position:relative;height:300px}.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs button{padding:5px 12px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-size:11px;font-weight:600;background:var(--card);color:var(--muted);transition:all .2s}
+.tabs button.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.sb{padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.sb.on{border-color:var(--accent);color:var(--accent);background:#f59e0b10}.sb:hover{border-color:var(--accent)}
+.ins{padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(15,23,42,.6);margin-bottom:8px;font-size:12px;line-height:1.6}
+.qb{padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:11px;cursor:pointer;transition:all .2s;margin:3px;text-align:left}
+.qb:hover{border-color:var(--accent);color:var(--accent)}
+.footer{display:flex;justify-content:space-between;padding:10px 14px;font-size:10px;color:var(--dim);background:#0a0f1a;border-radius:8px;border:1px solid #111827;margin-top:16px;flex-wrap:wrap;gap:8px}
+.loading{text-align:center;padding:60px;color:var(--muted)}.err{color:var(--red);padding:20px;font-size:13px}
 </style>
 </head>
 <body>
-<div class="wrap" id="app">
-  <div class="loading">⏳ 正在连接 Supabase 数据库...</div>
-</div>
+<div class="wrap" id="app"><div class="loading">⏳ 连接 Supabase...</div></div>
 <script>
-// ═══════════════════════════════════════
-// Supabase 连接
-// ═══════════════════════════════════════
-const SB_URL = 'https://vgdjuowhybkipjufmaco.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZnZGp1b3doeWJraXBqdWZtYWNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTcyMzUsImV4cCI6MjA5MTUzMzIzNX0.ayL75VKQpwC-AldTvQ93ulCamAZNXbH67UEHQKuSltg';
+const SB='https://vgdjuowhybkipjufmaco.supabase.co',SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZnZGp1b3doeWJraXBqdWZtYWNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTcyMzUsImV4cCI6MjA5MTUzMzIzNX0.ayL75VKQpwC-AldTvQ93ulCamAZNXbH67UEHQKuSltg';
+const Q=async(t,p='')=>{const r=await fetch(`${SB}/rest/v1/${t}?${p}`,{headers:{apikey:SK,Authorization:`Bearer ${SK}`}});if(!r.ok)throw new Error(t+':'+r.status);return r.json()};
+let D={},tab='overview',selSid=null,sK='cost',sD=true,cI=null;
+async function load(){try{
+  const[stores,daily,asins,keywords]=await Promise.all([Q('v_store_ad_summary'),Q('ad_daily_reports','select=sid,report_date,campaign_id,cost,sales,orders,clicks,impressions&order=report_date'),Q('asin_catalog','select=asin,product_line,tier,price,rating,review_count,bsr_rank,monthly_sales,monthly_revenue,brand,status&status=eq.active&order=monthly_revenue.desc.nullslast&limit=50'),Q('keyword_tracker','select=keyword,product_line,search_volume,word_type,priority&order=search_volume.desc')]);
+  const bS={};daily.forEach(r=>{if(!bS[r.sid])bS[r.sid]=[];bS[r.sid].push(r)});D={stores,bS,asins,keywords};if(!selSid&&stores[0])selSid=stores[0].sid;render();
+}catch(e){document.getElementById('app').innerHTML='<div class="err">❌ '+e.message+'</div>'}}
+const f$=n=>n!=null?'$'+Number(n).toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0}):'—';
+const fP=n=>n!=null?(Number(n)*100).toFixed(1)+'%':'—';const fPn=n=>n!=null?Number(n).toFixed(1)+'%':'—';
+const aC=v=>{v=Number(v);return v<25?'color:var(--green)':v<35?'color:var(--accent)':'color:var(--red)'};
+const aCr=v=>v==null?'':(v<.20?'color:var(--green)':v<.35?'color:var(--accent)':'color:var(--red)');
+function hTag(c){if(c.sales>0&&c.acos!=null&&c.acos<.15)return{l:'🌟明星',c:'tag-star'};if(c.sales>0&&c.acos!=null&&c.acos<.30)return{l:'✅健康',c:'tag-ok'};if(c.sales>0&&c.acos!=null&&c.acos<.45)return{l:'⚠️关注',c:'tag-warn'};if(c.cost>5&&c.orders===0)return{l:'🔴浪费',c:'tag-waste'};if(c.cost>0&&c.orders===0)return{l:'❄️冷启',c:'tag-cold'};if(c.sales>0)return{l:'⚠️偏高',c:'tag-high'};return null}
+function gC(sid){const days=D.bS[sid]||[];const mD=days.length?days.reduce((a,b)=>a.report_date>b.report_date?a:b).report_date:'';const cut=mD?new Date(new Date(mD)-6*864e5).toISOString().slice(0,10):'';const rc=days.filter(r=>r.report_date>=cut);const bC={};rc.forEach(r=>{if(!bC[r.campaign_id])bC[r.campaign_id]={id:r.campaign_id,cost:0,sales:0,orders:0,imp:0,clicks:0};const c=bC[r.campaign_id];c.cost+=Number(r.cost);c.sales+=Number(r.sales);c.orders+=r.orders;c.imp+=Number(r.impressions);c.clicks+=Number(r.clicks)});return Object.values(bC).map(c=>({...c,acos:c.sales>0?c.cost/c.sales:null,roas:c.cost>0?Math.round(c.sales/c.cost*100)/100:0,cpc:c.clicks>0?Math.round(c.cost/c.clicks*100)/100:0,name:'SP-#'+String(c.id).slice(-6)}))}
+function gI(cs){const tips=[];const w=cs.filter(c=>c.cost>3&&c.orders===0).sort((a,b)=>b.cost-a.cost);const tw=w.reduce((s,c)=>s+c.cost,0);const tc=cs.reduce((s,c)=>s+c.cost,0);
+if(w.length)tips.push({i:'🔥',t:w.length+' 个Campaign共烧$'+tw.toFixed(0)+'零出单，占总花费'+(tc>0?((tw/tc)*100).toFixed(0):0)+'%。建议检查精准度或暂停。'});
+const st=cs.filter(c=>c.orders>0&&c.acos!=null&&c.acos<.20).sort((a,b)=>b.roas-a.roas);if(st.length)tips.push({i:'💎',t:st.length+'个高效Campaign(ACOS<20%)，如"'+st[0].name+'" ROAS '+st[0].roas+'x。建议加预算。'});
+const hc=cs.filter(c=>c.cpc>2&&c.orders===0);if(hc.length)tips.push({i:'💸',t:hc.length+'个Campaign CPC>$2但没出单。建议降价或优化listing。'});
+const tk=cs.reduce((s,c)=>s+c.clicks,0),to=cs.reduce((s,c)=>s+c.orders,0);if(tk>50&&to/tk<.05)tips.push({i:'🎯',t:'整体转化率'+(to/tk*100).toFixed(1)+'%，低于行业均值8%。建议优化主图/价格/五点。'});
+if(!tips.length)tips.push({i:'✅',t:'广告结构健康，无明显问题。'});return tips}
+function render(){const{stores,asins,keywords}=D;const tC=stores.reduce((s,r)=>s+Number(r.total_cost),0),tS=stores.reduce((s,r)=>s+Number(r.total_sales),0),tO=stores.reduce((s,r)=>s+r.total_orders,0),tD=stores.reduce((s,r)=>s+r.total_days,0),dn=stores.filter(s=>s.total_days>=14).length,tKV=keywords.reduce((s,k)=>s+k.search_volume,0);
+const ti={};asins.forEach(a=>{ti[a.tier]=(ti[a.tier]||0)+1});const now=new Date().toLocaleString('zh-CN',{timeZone:'America/Los_Angeles'});
+document.getElementById('app').innerHTML=`<div class="header"><div><h1>Amazon 数据中台</h1><div class="sub"><span class="live-dot"></span>Supabase 实时·截至 ${stores[0]?.last_date||'—'}·${now}</div></div>
+<div class="tabs">${['overview','trend','campaigns','asin','keywords'].map(t=>`<button class="${tab===t?'on':''}" onclick="sw('${t}')">${{overview:'总览',trend:'广告趋势',campaigns:'Campaign诊断',asin:'ASIN目录',keywords:'关键词库'}[t]}</button>`).join('')}</div></div>
+<div class="kpi-grid"><div class="kpi"><div class="label">Tier1店铺</div><div class="val mono" style="color:var(--green)">${dn}/${stores.length}</div><div class="sub">14天覆盖</div></div>
+<div class="kpi"><div class="label">总花费</div><div class="val mono" style="color:var(--accent)">${f$(tC)}</div><div class="sub">${tD}天</div></div>
+<div class="kpi"><div class="label">总销售</div><div class="val mono" style="color:var(--green)">${f$(tS)}</div><div class="sub">${tO}单</div></div>
+<div class="kpi"><div class="label">ACOS</div><div class="val mono" style="${aC(tS>0?tC/tS*100:0)}">${tS>0?fPn(tC/tS*100):'—'}</div><div class="sub">ROAS ${tC>0?(tS/tC).toFixed(1):0}x</div></div>
+<div class="kpi"><div class="label">ASIN</div><div class="val mono" style="color:var(--blue)">${asins.length}</div><div class="sub">H:${ti.hero||0} S:${ti.standard||0}</div></div>
+<div class="kpi"><div class="label">关键词</div><div class="val mono" style="color:var(--purple)">${keywords.length}</div><div class="sub">${(tKV/10000).toFixed(0)}万</div></div></div>
+<div id="tc"></div><div class="footer"><span>⚡ 领星ERP→Claude MCP→Supabase→Vercel</span><span>${stores.length}店·${tD}天·5min刷新</span></div>`;rT()}
+function sw(t){tab=t;render()}function ss(sid){selSid=sid;render()}function ds(k){if(sK===k)sD=!sD;else{sK=k;sD=true}render()}
+function rT(){const el=document.getElementById('tc');if(!el)return;({overview:rO,trend:rTr,campaigns:rCa,asin:rA,keywords:rK})[tab]?.(el)}
 
-async function sbQuery(table, params = '') {
-  const r = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
-    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
-  });
-  if (!r.ok) throw new Error(`${table}: ${r.status}`);
-  return r.json();
-}
+function rO(el){const{stores}=D;el.innerHTML=`<div class="card"><div class="card-head"><span>📊 店铺广告覆盖</span><span class="info">${stores[0]?.first_date}→${stores[0]?.last_date}</span></div><div style="overflow-x:auto"><table><thead><tr><th>店铺</th><th>天数</th><th>ACOS</th><th>花费</th><th>销售</th><th>订单</th><th>日均</th><th>状态</th></tr></thead><tbody>${stores.map(s=>{const d=s.total_days>=14,p=Math.round(s.total_days/14*100);return`<tr><td style="font-weight:600">${s.store}</td><td><span class="mono" style="font-weight:700;${d?'color:var(--green)':'color:var(--accent)'}">${s.total_days}/14</span><div class="pb"><div class="pb-f" style="width:${p}%;background:${d?'var(--green)':'var(--accent)'}"></div></div></td><td class="mono" style="${s.acos_pct?aC(s.acos_pct):''}">${s.acos_pct?fPn(s.acos_pct):'—'}</td><td class="mono">${f$(s.total_cost)}</td><td class="mono" style="color:var(--green)">${f$(s.total_sales)}</td><td class="mono">${s.total_orders}</td><td class="mono" style="color:var(--muted)">${f$(s.avg_daily_cost)}/d</td><td><span class="tag ${d?'tag-done':'tag-partial'}">${d?'✅完成':'⏳进行'}</span></td></tr>`}).join('')}</tbody></table></div></div>`}
 
-// ═══════════════════════════════════════
-// 数据加载
-// ═══════════════════════════════════════
-let DATA = {};
+function rTr(el){const{stores,bS}=D;const days=bS[selSid]||[];const bD={};days.forEach(r=>{if(!bD[r.report_date])bD[r.report_date]={c:0,s:0,o:0};const d=bD[r.report_date];d.c+=Number(r.cost);d.s+=Number(r.sales);d.o+=r.orders});
+const sd=Object.entries(bD).sort((a,b)=>a[0].localeCompare(b[0]));const lb=sd.map(([d])=>d.slice(5)),co=sd.map(([,v])=>Math.round(v.c)),sl=sd.map(([,v])=>Math.round(v.s)),ac=sd.map(([,v])=>v.s>0?Math.round(v.c/v.s*1000)/10:null);
+const tC=co.reduce((s,v)=>s+v,0),tS=sl.reduce((s,v)=>s+v,0),tO=sd.reduce((s,[,v])=>s+v.o,0);
+el.innerHTML=`<div class="card"><div class="card-head"><span>📈 广告趋势</span><div style="display:flex;gap:4px;flex-wrap:wrap">${stores.map(s=>`<button class="sb ${selSid==s.sid?'on':''}" onclick="ss(${s.sid})">${s.store.replace(/-US$/,'').replace(/DUANGCE\(|\)_US/g,'')}(${s.total_days}d)</button>`).join('')}</div></div>
+<div style="padding:10px 18px;font-size:12px;color:var(--muted)">花费<b class="mono" style="color:var(--text)">${f$(tC)}</b>·销售<b class="mono" style="color:var(--green)">${f$(tS)}</b>·${tO}单·ACOS<b class="mono" style="${aC(tS>0?tC/tS*100:0)}">${tS>0?fPn(tC/tS*100):'—'}</b></div>
+<div class="chart-wrap"><canvas id="tCh"></canvas></div></div>`;
+if(cI)cI.destroy();const ctx=document.getElementById('tCh');if(ctx)cI=new Chart(ctx,{type:'bar',data:{labels:lb,datasets:[{label:'销售',data:sl,backgroundColor:'#10b98160',borderRadius:5,order:2},{label:'花费',data:co,backgroundColor:'#ef444460',borderRadius:5,order:2},{label:'ACOS%',data:ac,type:'line',borderColor:'#f59e0b',borderWidth:2,pointRadius:3,pointBackgroundColor:'#f59e0b',yAxisID:'y1',order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#64748b',font:{size:10}}}},scales:{x:{ticks:{color:'#475569',font:{size:10}},grid:{color:'#1a234040'}},y:{ticks:{color:'#475569',font:{size:10},callback:v=>'$'+v},grid:{color:'#1a234040'}},y1:{position:'right',min:0,max:60,ticks:{color:'#f59e0b',font:{size:10},callback:v=>v+'%'},grid:{display:false}}}}})}
 
-async function loadAll() {
-  try {
-    const [stores, daily, asins, keywords] = await Promise.all([
-      sbQuery('v_store_ad_summary'),
-      sbQuery('ad_daily_reports', 'select=sid,report_date,cost,sales,orders,clicks,impressions&order=report_date'),
-      sbQuery('asin_catalog', 'select=asin,product_line,tier,price,rating,review_count,bsr_rank,monthly_sales,monthly_revenue,brand,status&status=eq.active&order=monthly_revenue.desc.nullslast&limit=50'),
-      sbQuery('keyword_tracker', 'select=keyword,product_line,search_volume,word_type,priority&order=search_volume.desc'),
-    ]);
+function rCa(el){const{stores}=D;const cs=gC(selSid);const sd=[...cs].sort((a,b)=>sD?(b[sK]||0)-(a[sK]||0):(a[sK]||0)-(b[sK]||0));const mx=Math.max(...cs.map(c=>c.cost),1);
+const sn=stores.find(s=>s.sid==selSid)?.store||'';const tC=cs.reduce((s,c)=>s+c.cost,0),tS=cs.reduce((s,c)=>s+c.sales,0),tO=cs.reduce((s,c)=>s+c.orders,0),tK=cs.reduce((s,c)=>s+c.clicks,0);
+const SA=k=>`<span style="font-size:9px;margin-left:2px;opacity:.5">${sK===k?(sD?'▼':'▲'):''}</span>`;
+// v4 洞察数据
+const burnKings=cs.filter(c=>c.cost>0&&c.orders===0).sort((a,b)=>b.cost-a.cost).slice(0,5);
+const totalWaste=burnKings.reduce((s,c)=>s+c.cost,0);
+const lowStars=cs.filter(c=>c.orders>0&&c.acos!=null&&c.acos<.30).sort((a,b)=>a.cost-b.cost).slice(0,5);
+const worst=cs.filter(c=>(c.acos!=null&&c.acos>.35)||(c.cost>3&&c.orders===0)).sort((a,b)=>b.cost-a.cost);
+const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+const cS={p:'padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(15,23,42,.6);margin-bottom:6px'};
+// 智能建议
+const tips=[];
+if(burnKings.length)tips.push({i:'🔥',t:`${burnKings.length}个Campaign共烧$${totalWaste.toFixed(0)}零出单，占总花费${tC>0?((totalWaste/tC)*100).toFixed(0):0}%。建议检查关键词精准度或暂停。`});
+if(lowStars.length)tips.push({i:'💎',t:`${lowStars.length}个Campaign出单好但花费低（如"${lowStars[0].name}"仅花$${lowStars[0].cost.toFixed(0)}）。建议提高竞价放大利润。`});
+const hcNs=cs.filter(c=>c.cpc>1.5&&c.orders===0);if(hcNs.length)tips.push({i:'💸',t:`${hcNs.length}个Campaign CPC>$1.50但没出单。建议降低竞价或优化listing转化率。`});
+if(tK>50&&tO/tK<.05)tips.push({i:'🎯',t:`整体转化率${(tO/tK*100).toFixed(1)}%，低于行业平均(~8%)。建议A/B测试主图、价格、五点描述。`});
+if(!tips.length)tips.push({i:'✅',t:'当前广告结构健康，无明显问题。'});
+// 饼图颜色
+const PC=['#3b82f6','#8b5cf6','#ec4899','#f97316','#22c55e','#06b6d4','#eab308','#ef4444','#a78bfa','#f472b6','#34d399','#fb923c'];
+const pieData=sd.slice(0,8).map((c,i)=>({name:c.name,val:c.cost,clr:PC[i%PC.length]}));
+el.innerHTML=`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px">${stores.map(s=>`<button class="sb ${selSid==s.sid?'on':''}" onclick="ss(${s.sid})">${s.store.replace(/-US$/,'')}(${s.total_days}d)</button>`).join('')}</div>
+<!-- 🔥 烧钱王 + ⚡ 预算不足 双栏 -->
+<div class="grid-2">
+<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:#f87171;margin-bottom:10px">🔥 烧钱王 — 花钱不出单 TOP5</div>
+${burnKings.length===0?'<div style="font-size:11px;color:var(--dim);padding:8px">所有Campaign都有出单 🎉</div>':
+burnKings.map((c,i)=>`<div style="${cS.p}"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:11px;font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${medals[i]} ${c.name}</div><span class="mono" style="font-size:13px;font-weight:700;color:#f87171">$${c.cost.toFixed(2)}</span></div><div style="font-size:10px;color:var(--muted);margin-top:3px">${c.imp.toLocaleString()}展示·${c.clicks}点击·CPC $${c.cpc}·零出单</div></div>`).join('')}
+${burnKings.length?`<div style="font-size:10px;color:#f87171;font-weight:600;margin-top:4px">⚠ 浪费总额: $${totalWaste.toFixed(0)}（占总花费${tC>0?((totalWaste/tC)*100).toFixed(0):0}%）</div>`:''}
+</div>
+<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:#fbbf24;margin-bottom:10px">⚡ 预算不足 & 缺失广告</div>
+${lowStars.length?`<div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:6px">💰 出单好但花费低，建议加预算：</div>`+lowStars.map(c=>`<div style="${cS.p}"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:11px;font-weight:500;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.name}</div><div style="font-size:11px"><span style="color:#fbbf24;font-weight:600">花$${c.cost.toFixed(0)}</span> <span style="color:var(--green)">ROAS${c.roas}x</span></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">ACOS ${c.acos!=null?fP(c.acos):'—'}·${c.orders}单·$${c.sales.toFixed(0)}销售</div></div>`).join(''):'<div style="font-size:11px;color:var(--dim);padding:4px 0 8px">暂无低花费高效Campaign</div>'}
+<div style="font-size:10px;color:var(--muted);font-weight:600;margin:8px 0 6px">🕳️ 广告结构检测：</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">${['Auto','Broad','Exact','ASIN定向'].map(t=>{const ok=cs.some(c=>c.name.toLowerCase().includes(t.toLowerCase().replace('asin定向','asin')));return`<span class="tag" style="background:${ok?'#052e16':'#450a0a'};color:${ok?'#4ade80':'#f87171'};padding:3px 10px">${ok?'✅':'❌'} ${t}</span>`}).join('')}
+</div></div></div>
+<!-- 💀 需优化 Campaign -->
+<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:#f87171;margin-bottom:10px">💀 需优化 — ACOS>35%或花费>$3无出单（共${worst.length}个）</div>
+${worst.length===0?'<div style="font-size:11px;color:var(--dim)">所有Campaign表现正常 🎉</div>':
+`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:6px">${worst.slice(0,10).map(c=>{const rs=c.orders===0?'零出单':'ACOS '+(c.acos!=null?fP(c.acos):'');return`<div style="${cS.p};border-color:#422006"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:11px;font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.name}</div><span class="tag" style="background:${c.orders===0?'#450a0a':'#422006'};color:${c.orders===0?'#f87171':'#fbbf24'}">${rs}</span></div><div style="font-size:10px;color:var(--muted);margin-top:3px">花费$${c.cost.toFixed(2)}·${c.imp.toLocaleString()}展示·${c.clicks}点击·CPC $${c.cpc}</div></div>`}).join('')}</div>`}
+</div>
+<!-- 💡 智能建议 -->
+<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:#93c5fd;margin-bottom:10px">💡 智能建议 — ${sn}</div>
+<div style="display:flex;flex-direction:column;gap:8px">${tips.map(t=>`<div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.6"><span style="font-size:16px;flex-shrink:0">${t.i}</span><span style="color:#cbd5e1">${t.t}</span></div>`).join('')}</div></div>
+<!-- 📋 Campaign明细 + 饼图切换 -->
+<div class="card"><div class="card-head"><span>📋 Campaign明细</span><span class="info">花费${f$(tC)}·销售${f$(tS)}·${tO}单·ACOS ${tS>0?fP(tC/tS):'—'}</span></div>
+<div style="overflow-x:auto"><table><thead><tr><th>Campaign</th><th>状态</th><th style="text-align:right" onclick="ds('imp')">展示${SA('imp')}</th><th style="text-align:right" onclick="ds('clicks')">点击${SA('clicks')}</th><th style="text-align:right" onclick="ds('cost')">花费${SA('cost')}</th><th style="text-align:right" onclick="ds('sales')">销售${SA('sales')}</th><th style="text-align:right" onclick="ds('acos')">ACOS${SA('acos')}</th><th style="text-align:right" onclick="ds('roas')">ROAS${SA('roas')}</th><th style="min-width:50px">占比</th></tr></thead><tbody>
+${sd.map(c=>{const h=hTag(c);return`<tr><td><div style="font-weight:500;font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.name}</div></td><td>${h?`<span class="tag ${h.c}">${h.l}</span>`:''}</td><td style="text-align:right;color:var(--muted)" class="mono">${c.imp.toLocaleString()}</td><td style="text-align:right;color:var(--muted)" class="mono">${c.clicks}</td><td style="text-align:right;font-weight:600" class="mono">$${c.cost.toFixed(2)}</td><td style="text-align:right;${c.sales>0?'color:var(--green);font-weight:600':'color:var(--dim)'}" class="mono">${c.sales>0?'$'+c.sales.toFixed(2):'—'}</td><td style="text-align:right;font-weight:600;${aCr(c.acos)}" class="mono">${c.acos!=null?fP(c.acos):'—'}</td><td style="text-align:right;${c.roas>0?'color:var(--purple)':'color:var(--dim)'}" class="mono">${c.roas>0?c.roas+'x':'—'}</td><td><div style="width:100%;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:${(c.cost/mx*100).toFixed(1)}%;height:100%;border-radius:2px;background:${c.sales>0?'linear-gradient(90deg,var(--blue),var(--green))':'var(--blue)'}"></div></div></td></tr>`}).join('')}</tbody></table></div></div>
+<!-- 花费分布饼图 -->
+<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:12px">🍩 花费分布 Top 8</div>
+<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:center">
+<canvas id="pieC" width="240" height="240" style="max-width:240px"></canvas>
+<div style="font-size:11px;line-height:2.2">${pieData.map(p=>`<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:${p.clr};flex-shrink:0"></div><span style="color:var(--muted);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name}</span><span class="mono" style="color:var(--text);font-weight:600;margin-left:auto">$${p.val.toFixed(0)}</span></div>`).join('')}</div>
+</div></div>
+<!-- ⚡ 快捷指令 -->
+<div class="card" style="padding:14px 18px"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">⚡ 快捷分析 — 点击复制到 Claude</div><div style="display:flex;flex-wrap:wrap">${[
+'帮我分析'+sn+'最近的搜索词报表，找出浪费花费的词和值得加大投放的词',
+'帮我拉取'+sn+'最近7天SP广告数据并更新Supabase，给一份周度分析报告',
+'对比分析多个店铺的广告效率，给出优化建议',
+'帮我检查'+sn+'的FBA库存情况，有没有断货风险或滞销品',
+'用Sellersprite分析dewalt 20v battery关键词市场数据，评估投放价值',
+'生成SP六架构广告方案'
+].map(q=>`<button class="qb" onclick="navigator.clipboard.writeText(this.textContent);this.style.borderColor='var(--green)';this.style.color='var(--green)';setTimeout(()=>{this.style.borderColor='';this.style.color=''},1500)">${q}</button>`).join('')}</div></div>`;
+// 渲染饼图
+const pCtx=document.getElementById('pieC');
+if(pCtx&&pieData.length){let total=pieData.reduce((s,p)=>s+p.val,0);let startAngle=-Math.PI/2;const ctx2=pCtx.getContext('2d');const cx=120,cy=120,R=100,r=45;
+pieData.forEach(p=>{const slice=p.val/total*Math.PI*2;ctx2.beginPath();ctx2.moveTo(cx+r*Math.cos(startAngle),cy+r*Math.sin(startAngle));ctx2.arc(cx,cy,R,startAngle,startAngle+slice);ctx2.arc(cx,cy,r,startAngle+slice,startAngle,true);ctx2.closePath();ctx2.fillStyle=p.clr;ctx2.fill();ctx2.strokeStyle='#080c14';ctx2.lineWidth=2;ctx2.stroke();startAngle+=slice});
+}}
 
-    // 按 sid 聚合日度数据
-    const dailyBySid = {};
-    daily.forEach(r => {
-      if (!dailyBySid[r.sid]) dailyBySid[r.sid] = [];
-      dailyBySid[r.sid].push(r);
-    });
+function rA(el){const{asins}=D;const tC=t=>t==='hero'?'var(--accent)':t==='standard'?'var(--blue)':'var(--dim)';el.innerHTML=`<div class="card"><div class="card-head"><span>📦 ASIN目录</span><span class="info">${asins.length}活跃</span></div><div style="overflow-x:auto"><table><thead><tr><th>Tier</th><th>ASIN</th><th>产品线</th><th>价格</th><th>评分</th><th>评论</th><th>BSR</th><th>月销</th><th>月收入</th></tr></thead><tbody>${asins.filter(a=>a.monthly_sales>0||a.tier!=='tail').slice(0,30).map(a=>`<tr><td><span style="color:${tC(a.tier)};font-weight:700;font-size:10px;text-transform:uppercase">${a.tier}</span></td><td class="mono" style="font-size:11px">${a.asin}</td><td style="font-size:11px">${a.product_line||'—'}</td><td class="mono">${a.price?'$'+Number(a.price).toFixed(0):'—'}</td><td class="mono">${a.rating||'—'}</td><td class="mono">${a.review_count||0}</td><td class="mono">${a.bsr_rank?'#'+Number(a.bsr_rank).toLocaleString():'—'}</td><td class="mono" style="color:var(--green);font-weight:600">${a.monthly_sales||0}</td><td class="mono" style="color:var(--green)">${a.monthly_revenue?f$(a.monthly_revenue):'—'}</td></tr>`).join('')}</tbody></table></div></div>`}
 
-    DATA = { stores, dailyBySid, asins, keywords };
-    render();
-  } catch (e) {
-    document.getElementById('app').innerHTML = `<div class="err">❌ 连接失败: ${e.message}<br><br>请检查 Supabase 项目是否在线</div>`;
-  }
-}
+function rK(el){const{keywords}=D;const bL={};keywords.forEach(k=>{if(!bL[k.product_line])bL[k.product_line]={n:0,v:0,h:0};bL[k.product_line].n++;bL[k.product_line].v+=k.search_volume;if(k.priority==='high')bL[k.product_line].h++});const ls=Object.entries(bL).sort((a,b)=>b[1].v-a[1].v);const mV=ls[0]?.[1].v||1;
+el.innerHTML=`<div class="grid-2"><div class="card"><div class="card-head"><span>🔑 产品线搜索量</span></div><div style="padding:16px">${ls.map(([n,d])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between"><span style="font-weight:600;font-size:12px">${n}</span><span class="mono" style="color:var(--cyan);font-size:11px">${(d.v/1000).toFixed(0)}K</span></div><div style="width:100%;height:4px;background:var(--border);border-radius:2px;margin-top:3px"><div style="width:${d.v/mV*100}%;height:100%;background:var(--cyan);border-radius:2px"></div></div><div style="font-size:10px;color:var(--muted);margin-top:2px">${d.n}词·${d.h}高优</div></div>`).join('')}</div></div>
+<div class="card"><div class="card-head"><span>📋 Top25</span></div><div style="overflow-x:auto"><table><thead><tr><th>关键词</th><th>产品线</th><th>月搜索</th><th>优先级</th></tr></thead><tbody>${keywords.slice(0,25).map(k=>`<tr><td style="font-size:11px">${k.keyword}</td><td class="mono" style="font-size:11px">${k.product_line}</td><td class="mono" style="color:var(--cyan)">${(k.search_volume/1000).toFixed(1)}K</td><td><span class="tag" style="background:${k.priority==='high'?'#ef444420':'#3b82f620'};color:${k.priority==='high'?'var(--red)':'var(--blue)'}">${k.priority}</span></td></tr>`).join('')}</tbody></table></div></div></div>`}
 
-// ═══════════════════════════════════════
-// 辅助函数
-// ═══════════════════════════════════════
-const fmtUSD = n => n != null ? `$${Number(n).toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0})}` : '—';
-const fmtPct = n => n != null ? `${Number(n).toFixed(1)}%` : '—';
-const acosClass = v => { v = Number(v); if (v < 25) return 'color:var(--green)'; if (v < 35) return 'color:var(--accent)'; return 'color:var(--red)'; };
-
-let currentTab = 'overview';
-let selectedSid = null;
-
-function render() {
-  const { stores, dailyBySid, asins, keywords } = DATA;
-  const totalCost = stores.reduce((s,r) => s + Number(r.total_cost), 0);
-  const totalSales = stores.reduce((s,r) => s + Number(r.total_sales), 0);
-  const totalOrders = stores.reduce((s,r) => s + r.total_orders, 0);
-  const totalDays = stores.reduce((s,r) => s + r.total_days, 0);
-  const doneStores = stores.filter(s => s.total_days >= 14).length;
-  const totalKwVol = keywords.reduce((s,k) => s + k.search_volume, 0);
-
-  // Tier counts
-  const tiers = {};
-  asins.forEach(a => { tiers[a.tier] = (tiers[a.tier]||0) + 1; });
-
-  const now = new Date().toLocaleString('zh-CN', {timeZone:'America/Los_Angeles'});
-
-  document.getElementById('app').innerHTML = `
-    <div class="header">
-      <div>
-        <h1>Amazon 数据中台</h1>
-        <div class="sub"><span class="live-dot"></span>Supabase 实时 · 数据截至 ${stores[0]?.last_date || '—'} · 刷新于 ${now}</div>
-      </div>
-      <div class="tabs">
-        <button class="${currentTab==='overview'?'on':''}" onclick="switchTab('overview')">总览</button>
-        <button class="${currentTab==='trend'?'on':''}" onclick="switchTab('trend')">广告趋势</button>
-        <button class="${currentTab==='asin'?'on':''}" onclick="switchTab('asin')">ASIN目录</button>
-        <button class="${currentTab==='keywords'?'on':''}" onclick="switchTab('keywords')">关键词库</button>
-      </div>
-    </div>
-
-    <div class="kpi-grid">
-      <div class="kpi"><div class="label">Tier 1 店铺</div><div class="val mono" style="color:var(--green)">${doneStores}/${stores.length}</div><div class="sub">14天完整覆盖</div></div>
-      <div class="kpi"><div class="label">总广告花费</div><div class="val mono" style="color:var(--accent)">${fmtUSD(totalCost)}</div><div class="sub">${totalDays}天数据</div></div>
-      <div class="kpi"><div class="label">总广告销售</div><div class="val mono" style="color:var(--green)">${fmtUSD(totalSales)}</div><div class="sub">${totalOrders} 单</div></div>
-      <div class="kpi"><div class="label">ASIN 目录</div><div class="val mono" style="color:var(--blue)">${asins.length}</div><div class="sub">Hero:${tiers.hero||0} Std:${tiers.standard||0} Tail:${tiers.tail||0}</div></div>
-      <div class="kpi"><div class="label">关键词库</div><div class="val mono" style="color:var(--purple)">${keywords.length}</div><div class="sub">${(totalKwVol/10000).toFixed(0)}万月搜索量</div></div>
-    </div>
-
-    <div id="tab-content"></div>
-
-    <div class="footer">
-      <span>⚡ 领星 ERP → Claude MCP → Supabase → Vercel 看板</span>
-      <span>${stores.length} 店铺 · ${totalDays} 天数据 · 每5分钟自动刷新</span>
-    </div>
-  `;
-
-  renderTab();
-}
-
-function switchTab(t) { currentTab = t; render(); }
-
-function renderTab() {
-  const el = document.getElementById('tab-content');
-  if (!el) return;
-  if (currentTab === 'overview') renderOverview(el);
-  else if (currentTab === 'trend') renderTrend(el);
-  else if (currentTab === 'asin') renderAsin(el);
-  else if (currentTab === 'keywords') renderKeywords(el);
-}
-
-// ═══════════════════════════════════════
-// 总览
-// ═══════════════════════════════════════
-function renderOverview(el) {
-  const { stores } = DATA;
-  let rows = stores.map(s => {
-    const pct = Math.round(s.total_days / 14 * 100);
-    const done = s.total_days >= 14;
-    return `<tr>
-      <td style="font-weight:600">${s.store}</td>
-      <td><span class="mono" style="font-weight:700;${done?'color:var(--green)':'color:var(--accent)'}">${s.total_days}/14</span>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${done?'var(--green)':'var(--accent)'}"></div></div></td>
-      <td style="${acosClass(s.acos_pct)}" class="mono">${s.acos_pct ? fmtPct(s.acos_pct) : '—'}</td>
-      <td class="mono">${fmtUSD(s.total_cost)}</td>
-      <td class="mono" style="color:var(--green)">${fmtUSD(s.total_sales)}</td>
-      <td class="mono">${s.total_orders}</td>
-      <td class="mono" style="color:var(--muted)">${fmtUSD(s.avg_daily_cost)}/d</td>
-      <td><span class="tag ${done?'tag-done':'tag-partial'}">${done?'✅ 完成':'⏳ 进行'}</span></td>
-    </tr>`;
-  }).join('');
-
-  el.innerHTML = `
-    <div class="card" style="animation-delay:.1s">
-      <div class="card-head"><span>📊 店铺广告覆盖</span><span class="info">${stores[0]?.first_date} → ${stores[0]?.last_date} · 14天窗口</span></div>
-      <div style="overflow-x:auto">
-        <table>
-          <thead><tr><th>店铺</th><th>天数</th><th>ACOS</th><th>花费</th><th>销售</th><th>订单</th><th>日均</th><th>状态</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-    </div>
-  `;
-}
-
-// ═══════════════════════════════════════
-// 广告趋势
-// ═══════════════════════════════════════
-function renderTrend(el) {
-  const { stores, dailyBySid } = DATA;
-  const storeButtons = stores.map(s =>
-    `<button class="store-btn ${selectedSid==s.sid?'on':''}" onclick="selectStore(${s.sid})">${s.store.replace(/-US$/,'')} (${s.total_days}d)</button>`
-  ).join('');
-
-  if (!selectedSid) selectedSid = stores[0]?.sid;
-  const days = dailyBySid[selectedSid] || [];
-
-  // Aggregate by date
-  const byDate = {};
-  days.forEach(r => {
-    if (!byDate[r.report_date]) byDate[r.report_date] = {cost:0,sales:0,orders:0,clicks:0};
-    const d = byDate[r.report_date];
-    d.cost += Number(r.cost); d.sales += Number(r.sales); d.orders += r.orders; d.clicks += r.clicks;
-  });
-  const sorted = Object.entries(byDate).sort((a,b) => a[0].localeCompare(b[0]));
-  const labels = sorted.map(([d]) => d.slice(5));
-  const costs = sorted.map(([,v]) => Math.round(v.cost));
-  const sales = sorted.map(([,v]) => Math.round(v.sales));
-  const acosArr = sorted.map(([,v]) => v.sales > 0 ? Math.round(v.cost/v.sales*1000)/10 : null);
-
-  const totalC = costs.reduce((s,v)=>s+v,0);
-  const totalS = sales.reduce((s,v)=>s+v,0);
-  const totalO = sorted.reduce((s,[,v])=>s+v.orders,0);
-
-  el.innerHTML = `
-    <div class="card" style="animation-delay:.1s">
-      <div class="card-head">
-        <span>📈 广告日趋势</span>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">${storeButtons}</div>
-      </div>
-      <div style="padding:12px 20px;font-size:12px;color:var(--muted)">
-        花费 <strong class="mono" style="color:var(--text)">${fmtUSD(totalC)}</strong> · 
-        销售 <strong class="mono" style="color:var(--green)">${fmtUSD(totalS)}</strong> · 
-        ${totalO}单 · 
-        ACOS <strong class="mono" style="${acosClass(totalS>0?totalC/totalS*100:0)}">${totalS>0?fmtPct(totalC/totalS*100):'—'}</strong>
-      </div>
-      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
-    </div>
-  `;
-
-  // Render chart
-  const ctx = document.getElementById('trendChart');
-  if (ctx) {
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [
-          { label: '销售', data: sales, backgroundColor: '#10b98180', borderRadius: 6, order: 2 },
-          { label: '花费', data: costs, backgroundColor: '#ef444480', borderRadius: 6, order: 2 },
-          { label: 'ACOS%', data: acosArr, type: 'line', borderColor: '#f59e0b', borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: '#f59e0b', yAxisID: 'y1', order: 1 },
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { labels: { color: '#64748b', font: { size: 11 } } } },
-        scales: {
-          x: { ticks: { color: '#475569', font: { size: 11 } }, grid: { color: '#1e293b' } },
-          y: { ticks: { color: '#475569', font: { size: 11 }, callback: v => '$'+v }, grid: { color: '#1e293b' } },
-          y1: { position: 'right', min: 0, max: 60, ticks: { color: '#f59e0b', font: { size: 11 }, callback: v => v+'%' }, grid: { display: false } },
-        }
-      }
-    });
-  }
-}
-
-function selectStore(sid) { selectedSid = sid; render(); }
-
-// ═══════════════════════════════════════
-// ASIN 目录
-// ═══════════════════════════════════════
-function renderAsin(el) {
-  const { asins } = DATA;
-  const tierColor = t => t==='hero'?'var(--accent)':t==='standard'?'var(--blue)':'var(--dim)';
-  let rows = asins.filter(a => a.monthly_sales > 0 || a.tier !== 'tail').slice(0, 30).map(a => `<tr>
-    <td><span style="color:${tierColor(a.tier)};font-weight:700;font-size:11px;text-transform:uppercase">${a.tier}</span></td>
-    <td class="mono" style="font-size:12px">${a.asin}</td>
-    <td style="font-size:12px">${a.product_line || '—'}</td>
-    <td class="mono">${a.price ? '$'+Number(a.price).toFixed(0) : '—'}</td>
-    <td class="mono">${a.rating || '—'}</td>
-    <td class="mono">${a.review_count || 0}</td>
-    <td class="mono">${a.bsr_rank ? '#'+Number(a.bsr_rank).toLocaleString() : '—'}</td>
-    <td class="mono" style="color:var(--green);font-weight:600">${a.monthly_sales || 0}</td>
-    <td class="mono" style="color:var(--green)">${a.monthly_revenue ? fmtUSD(a.monthly_revenue) : '—'}</td>
-  </tr>`).join('');
-
-  el.innerHTML = `
-    <div class="card" style="animation-delay:.1s">
-      <div class="card-head"><span>📦 ASIN 目录 (Hero + Standard)</span><span class="info">${asins.length} 活跃 ASIN</span></div>
-      <div style="overflow-x:auto">
-        <table>
-          <thead><tr><th>Tier</th><th>ASIN</th><th>产品线</th><th>价格</th><th>评分</th><th>评论</th><th>BSR</th><th>月销</th><th>月收入</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-    </div>
-  `;
-}
-
-// ═══════════════════════════════════════
-// 关键词库
-// ═══════════════════════════════════════
-function renderKeywords(el) {
-  const { keywords } = DATA;
-  // Group by product_line
-  const byLine = {};
-  keywords.forEach(k => {
-    if (!byLine[k.product_line]) byLine[k.product_line] = { kw: 0, vol: 0, high: 0 };
-    byLine[k.product_line].kw++;
-    byLine[k.product_line].vol += k.search_volume;
-    if (k.priority === 'high') byLine[k.product_line].high++;
-  });
-  const lines = Object.entries(byLine).sort((a,b) => b[1].vol - a[1].vol);
-  const maxVol = lines[0]?.[1].vol || 1;
-
-  let linesHtml = lines.map(([name, d]) => `
-    <div style="margin-bottom:12px">
-      <div style="display:flex;justify-content:space-between;align-items:baseline">
-        <span style="font-weight:600;font-size:13px">${name}</span>
-        <span class="mono" style="color:var(--cyan);font-size:12px">${(d.vol/1000).toFixed(0)}K</span>
-      </div>
-      <div style="width:100%;height:4px;background:var(--border);border-radius:2px;margin-top:4px">
-        <div style="width:${d.vol/maxVol*100}%;height:100%;background:var(--cyan);border-radius:2px"></div>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:2px">${d.kw}词 · ${d.high}个高优</div>
-    </div>
-  `).join('');
-
-  let kwRows = keywords.slice(0, 25).map(k => `<tr>
-    <td style="font-size:12px">${k.keyword}</td>
-    <td class="mono">${k.product_line}</td>
-    <td class="mono" style="color:var(--cyan)">${(k.search_volume/1000).toFixed(1)}K</td>
-    <td><span class="tag" style="background:${k.priority==='high'?'#ef444420':'#3b82f620'};color:${k.priority==='high'?'var(--red)':'var(--blue)'}">${k.priority}</span></td>
-    <td style="font-size:11px;color:var(--muted)">${k.word_type}</td>
-  </tr>`).join('');
-
-  el.innerHTML = `
-    <div class="grid-2">
-      <div class="card" style="animation-delay:.1s">
-        <div class="card-head"><span>🔑 产品线搜索量</span></div>
-        <div style="padding:20px">${linesHtml}</div>
-      </div>
-      <div class="card" style="animation-delay:.2s">
-        <div class="card-head"><span>📋 关键词明细 Top 25</span></div>
-        <div style="overflow-x:auto">
-          <table>
-            <thead><tr><th>关键词</th><th>产品线</th><th>月搜索</th><th>优先级</th><th>类型</th></tr></thead>
-            <tbody>${kwRows}</tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// ═══════════════════════════════════════
-// 初始化 + 自动刷新
-// ═══════════════════════════════════════
-loadAll();
-setInterval(loadAll, 5 * 60 * 1000); // 每5分钟刷新
+load();setInterval(load,300000);
 </script>
 </body>
 </html>
