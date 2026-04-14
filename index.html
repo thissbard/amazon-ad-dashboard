@@ -3,40 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Amazon 数据中台 · 实时看板</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Amazon 数据中台 v3</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{--bg:#080c14;--card:#0f1629;--border:#1a2340;--accent:#f59e0b;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--purple:#8b5cf6;--cyan:#06b6d4;--text:#e2e8f0;--muted:#64748b;--dim:#334155}
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Noto Sans SC','Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}.mono{font-family:'IBM Plex Mono',monospace}
-.wrap{max-width:1340px;margin:0 auto;padding:20px 24px}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.header h1{font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header .sub{color:var(--muted);font-size:12px;margin-top:4px}.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;margin-right:6px}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px}.kpi .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.kpi .val{font-size:24px;font-weight:800;line-height:1.1}.kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;animation:fadeUp .5s ease both}
-.card-head{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.card-head span{font-weight:700;font-size:13px}.card-head .info{font-size:11px;color:var(--muted);font-weight:400}
-table{width:100%;border-collapse:collapse;font-size:12px}th{padding:8px 12px;text-align:left;color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px;background:#0a0f1f;cursor:pointer;user-select:none;white-space:nowrap}
-th:hover{color:var(--accent)}td{padding:8px 12px;border-top:1px solid var(--border)}
-.tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;white-space:nowrap}
-.tag-done{background:#10b98120;color:var(--green)}.tag-partial{background:#f59e0b20;color:var(--accent)}.tag-star{background:#052e16;color:#4ade80}.tag-ok{background:#0c2d1b;color:#86efac}
-.tag-warn{background:#422006;color:#fbbf24}.tag-waste{background:#450a0a;color:#f87171}.tag-cold{background:#1e1b4b;color:#a78bfa}.tag-high{background:#ef444420;color:var(--red)}
-.pb{width:60px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle;margin-left:6px}.pb-f{height:100%;border-radius:2px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}@media(max-width:900px){.grid-2{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
-.chart-wrap{padding:16px;position:relative;height:300px}.tabs{display:flex;gap:4px;flex-wrap:wrap}
-.tabs button{padding:5px 12px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-size:11px;font-weight:600;background:var(--card);color:var(--muted);transition:all .2s}
+.wrap{max-width:1400px;margin:0 auto;padding:16px 20px}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.header h1{font-size:20px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .sub{color:var(--muted);font-size:11px;margin-top:3px}.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;margin-right:5px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.region-bar{display:flex;gap:5px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.rb{padding:4px 12px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-size:11px;font-weight:600;background:var(--card);color:var(--muted);transition:all .2s;display:flex;align-items:center;gap:4px}
+.rb:hover{border-color:var(--accent)}.rb.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.rb .rc{font-size:9px;opacity:.7}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px}.kpi .label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.kpi .val{font-size:20px;font-weight:800;line-height:1.1}.kpi .sub{font-size:10px;color:var(--muted);margin-top:3px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px;animation:fadeUp .4s ease both}
+.card-head{padding:9px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.card-head span{font-weight:700;font-size:12px}.card-head .info{font-size:10px;color:var(--muted);font-weight:400}
+table{width:100%;border-collapse:collapse;font-size:11px}th{padding:6px 8px;text-align:left;color:var(--muted);font-weight:600;font-size:9px;text-transform:uppercase;letter-spacing:.5px;background:#0a0f1f;cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:var(--accent)}td{padding:6px 8px;border-top:1px solid var(--border)}
+.tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:600;white-space:nowrap}
+.tag-us{background:#3b82f620;color:#60a5fa}.tag-ca{background:#ef444420;color:#f87171}.tag-uk{background:#8b5cf620;color:#a78bfa}.tag-eu{background:#06b6d420;color:#22d3ee}
+.tag-star{background:#052e16;color:#4ade80}.tag-ok{background:#0c2d1b;color:#86efac}.tag-warn{background:#422006;color:#fbbf24}.tag-waste{background:#450a0a;color:#f87171}.tag-cold{background:#1e1b4b;color:#a78bfa}.tag-high{background:#ef444420;color:var(--red)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}@media(max-width:900px){.grid-2{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+.chart-wrap{padding:12px;position:relative;height:260px}
+.tabs{display:flex;gap:3px;flex-wrap:wrap}.tabs button{padding:4px 10px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-size:10px;font-weight:600;background:var(--card);color:var(--muted);transition:all .2s}
 .tabs button.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
-.sb{padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.sb{padding:3px 8px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:10px;cursor:pointer;transition:all .2s;white-space:nowrap}
 .sb.on{border-color:var(--accent);color:var(--accent);background:#f59e0b10}.sb:hover{border-color:var(--accent)}
-.ins{padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(15,23,42,.6);margin-bottom:8px;font-size:12px;line-height:1.6}
-.qb{padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:11px;cursor:pointer;transition:all .2s;margin:3px;text-align:left}
-.qb:hover{border-color:var(--accent);color:var(--accent)}
-.footer{display:flex;justify-content:space-between;padding:10px 14px;font-size:10px;color:var(--dim);background:#0a0f1a;border-radius:8px;border:1px solid #111827;margin-top:16px;flex-wrap:wrap;gap:8px}
-.loading{text-align:center;padding:60px;color:var(--muted)}.err{color:var(--red);padding:20px;font-size:13px}
+.rg-us{border-left:3px solid #3b82f6}.rg-ca{border-left:3px solid #ef4444}.rg-uk{border-left:3px solid #8b5cf6}.rg-eu{border-left:3px solid #06b6d4}
+.footer{display:flex;justify-content:space-between;padding:8px 12px;font-size:9px;color:var(--dim);background:#0a0f1a;border-radius:6px;border:1px solid #111827;margin-top:12px;flex-wrap:wrap;gap:6px}
+.loading{text-align:center;padding:50px;color:var(--muted)}.err{color:var(--red);padding:16px;font-size:12px}
+.bar-h{height:16px;border-radius:3px;min-width:2px;transition:width .3s}
+.sync-ok{color:var(--green)}.sync-err{color:var(--red)}.sync-empty{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -44,115 +46,154 @@ th:hover{color:var(--accent)}td{padding:8px 12px;border-top:1px solid var(--bord
 <script>
 const SB='https://vgdjuowhybkipjufmaco.supabase.co',SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZnZGp1b3doeWJraXBqdWZtYWNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTcyMzUsImV4cCI6MjA5MTUzMzIzNX0.ayL75VKQpwC-AldTvQ93ulCamAZNXbH67UEHQKuSltg';
 const Q=async(t,p='')=>{const r=await fetch(`${SB}/rest/v1/${t}?${p}`,{headers:{apikey:SK,Authorization:`Bearer ${SK}`}});if(!r.ok)throw new Error(t+':'+r.status);return r.json()};
-let D={},tab='overview',selSid=null,sK='cost',sD=true,cI=null;
+let D={},tab='overview',selRegion='ALL',selSid=null,sK='cost',sD=true,cI=null;
+const RG={ALL:{i:'🌍',l:'全球'},US:{i:'🇺🇸',l:'美国'},CA:{i:'🇨🇦',l:'加拿大'},UK:{i:'🇬🇧',l:'英国'},EU:{i:'🇪🇺',l:'欧盟'}};
+const TABS={overview:'总览',trend:'广告趋势',campaigns:'Campaign诊断',matrix:'产品矩阵',keywords:'关键词库',regions:'区域对比',sync:'同步监控'};
+
 async function load(){try{
-  const[stores,daily,asins,keywords]=await Promise.all([Q('v_store_ad_summary'),Q('ad_daily_reports','select=sid,report_date,campaign_id,cost,sales,orders,clicks,impressions&order=report_date'),Q('asin_catalog','select=asin,product_line,tier,price,rating,review_count,bsr_rank,monthly_sales,monthly_revenue,brand,status&status=eq.active&order=monthly_revenue.desc.nullslast&limit=50'),Q('keyword_tracker','select=keyword,product_line,search_volume,word_type,priority&order=search_volume.desc')]);
-  const bS={};daily.forEach(r=>{if(!bS[r.sid])bS[r.sid]=[];bS[r.sid].push(r)});D={stores,bS,asins,keywords};if(!selSid&&stores[0])selSid=stores[0].sid;render();
+  const[stores,daily,cNames,asins,kws,logs]=await Promise.all([
+    Q('v_store_ad_summary','select=*'),
+    Q('ad_daily_reports','select=sid,report_date,campaign_id,cost,sales,orders,clicks,impressions&order=report_date'),
+    Q('campaign_names','select=campaign_id,name'),
+    Q('asin_catalog','select=asin,product_line,tier,price,rating,review_count,bsr_rank,monthly_sales,monthly_revenue,brand,status&status=eq.active&order=monthly_revenue.desc.nullslast&limit=200'),
+    Q('keyword_tracker','select=keyword,product_line,search_volume,word_type,priority&order=search_volume.desc'),
+    Q('sync_logs','select=*&order=created_at.desc&limit=15')
+  ]);
+  const bS={};daily.forEach(r=>{if(!bS[r.sid])bS[r.sid]=[];bS[r.sid].push(r)});
+  const cN={};cNames.forEach(c=>{cN[c.campaign_id]=c.name});
+  D={stores:stores.filter(s=>s.total_cost>0),allStores:stores,bS,cN,asins,kws,logs};
+  if(!selSid&&D.stores[0])selSid=D.stores[0].sid;render();
 }catch(e){document.getElementById('app').innerHTML='<div class="err">❌ '+e.message+'</div>'}}
+
 const f$=n=>n!=null?'$'+Number(n).toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0}):'—';
 const fP=n=>n!=null?(Number(n)*100).toFixed(1)+'%':'—';const fPn=n=>n!=null?Number(n).toFixed(1)+'%':'—';
 const aC=v=>{v=Number(v);return v<25?'color:var(--green)':v<35?'color:var(--accent)':'color:var(--red)'};
 const aCr=v=>v==null?'':(v<.20?'color:var(--green)':v<.35?'color:var(--accent)':'color:var(--red)');
+const rClr=r=>({US:'#3b82f6',CA:'#ef4444',UK:'#8b5cf6',EU:'#06b6d4'}[r]||'var(--muted)');
+const rTag=r=>'<span class="tag tag-'+r.toLowerCase()+'">'+r+'</span>';
+const fS=()=>selRegion==='ALL'?D.stores:D.stores.filter(s=>s.region===selRegion);
+const sN=n=>n.replace(/-US$|-CA$|-UK$|-DE$|-FR$|-IT$|-ES$|-SE$|-IE$|-MX$/,'');
 function hTag(c){if(c.sales>0&&c.acos!=null&&c.acos<.15)return{l:'🌟明星',c:'tag-star'};if(c.sales>0&&c.acos!=null&&c.acos<.30)return{l:'✅健康',c:'tag-ok'};if(c.sales>0&&c.acos!=null&&c.acos<.45)return{l:'⚠️关注',c:'tag-warn'};if(c.cost>5&&c.orders===0)return{l:'🔴浪费',c:'tag-waste'};if(c.cost>0&&c.orders===0)return{l:'❄️冷启',c:'tag-cold'};if(c.sales>0)return{l:'⚠️偏高',c:'tag-high'};return null}
-function gC(sid){const days=D.bS[sid]||[];const mD=days.length?days.reduce((a,b)=>a.report_date>b.report_date?a:b).report_date:'';const cut=mD?new Date(new Date(mD)-6*864e5).toISOString().slice(0,10):'';const rc=days.filter(r=>r.report_date>=cut);const bC={};rc.forEach(r=>{if(!bC[r.campaign_id])bC[r.campaign_id]={id:r.campaign_id,cost:0,sales:0,orders:0,imp:0,clicks:0};const c=bC[r.campaign_id];c.cost+=Number(r.cost);c.sales+=Number(r.sales);c.orders+=r.orders;c.imp+=Number(r.impressions);c.clicks+=Number(r.clicks)});return Object.values(bC).map(c=>({...c,acos:c.sales>0?c.cost/c.sales:null,roas:c.cost>0?Math.round(c.sales/c.cost*100)/100:0,cpc:c.clicks>0?Math.round(c.cost/c.clicks*100)/100:0,name:'SP-#'+String(c.id).slice(-6)}))}
-function gI(cs){const tips=[];const w=cs.filter(c=>c.cost>3&&c.orders===0).sort((a,b)=>b.cost-a.cost);const tw=w.reduce((s,c)=>s+c.cost,0);const tc=cs.reduce((s,c)=>s+c.cost,0);
-if(w.length)tips.push({i:'🔥',t:w.length+' 个Campaign共烧$'+tw.toFixed(0)+'零出单，占总花费'+(tc>0?((tw/tc)*100).toFixed(0):0)+'%。建议检查精准度或暂停。'});
-const st=cs.filter(c=>c.orders>0&&c.acos!=null&&c.acos<.20).sort((a,b)=>b.roas-a.roas);if(st.length)tips.push({i:'💎',t:st.length+'个高效Campaign(ACOS<20%)，如"'+st[0].name+'" ROAS '+st[0].roas+'x。建议加预算。'});
-const hc=cs.filter(c=>c.cpc>2&&c.orders===0);if(hc.length)tips.push({i:'💸',t:hc.length+'个Campaign CPC>$2但没出单。建议降价或优化listing。'});
-const tk=cs.reduce((s,c)=>s+c.clicks,0),to=cs.reduce((s,c)=>s+c.orders,0);if(tk>50&&to/tk<.05)tips.push({i:'🎯',t:'整体转化率'+(to/tk*100).toFixed(1)+'%，低于行业均值8%。建议优化主图/价格/五点。'});
-if(!tips.length)tips.push({i:'✅',t:'广告结构健康，无明显问题。'});return tips}
-function render(){const{stores,asins,keywords}=D;const tC=stores.reduce((s,r)=>s+Number(r.total_cost),0),tS=stores.reduce((s,r)=>s+Number(r.total_sales),0),tO=stores.reduce((s,r)=>s+r.total_orders,0),tD=stores.reduce((s,r)=>s+r.total_days,0),dn=stores.filter(s=>s.total_days>=14).length,tKV=keywords.reduce((s,k)=>s+k.search_volume,0);
-const ti={};asins.forEach(a=>{ti[a.tier]=(ti[a.tier]||0)+1});const now=new Date().toLocaleString('zh-CN',{timeZone:'America/Los_Angeles'});
-document.getElementById('app').innerHTML=`<div class="header"><div><h1>Amazon 数据中台</h1><div class="sub"><span class="live-dot"></span>Supabase 实时·截至 ${stores[0]?.last_date||'—'}·${now}</div></div>
-<div class="tabs">${['overview','trend','campaigns','asin','keywords'].map(t=>`<button class="${tab===t?'on':''}" onclick="sw('${t}')">${{overview:'总览',trend:'广告趋势',campaigns:'Campaign诊断',asin:'ASIN目录',keywords:'关键词库'}[t]}</button>`).join('')}</div></div>
-<div class="kpi-grid"><div class="kpi"><div class="label">Tier1店铺</div><div class="val mono" style="color:var(--green)">${dn}/${stores.length}</div><div class="sub">14天覆盖</div></div>
-<div class="kpi"><div class="label">总花费</div><div class="val mono" style="color:var(--accent)">${f$(tC)}</div><div class="sub">${tD}天</div></div>
-<div class="kpi"><div class="label">总销售</div><div class="val mono" style="color:var(--green)">${f$(tS)}</div><div class="sub">${tO}单</div></div>
-<div class="kpi"><div class="label">ACOS</div><div class="val mono" style="${aC(tS>0?tC/tS*100:0)}">${tS>0?fPn(tC/tS*100):'—'}</div><div class="sub">ROAS ${tC>0?(tS/tC).toFixed(1):0}x</div></div>
-<div class="kpi"><div class="label">ASIN</div><div class="val mono" style="color:var(--blue)">${asins.length}</div><div class="sub">H:${ti.hero||0} S:${ti.standard||0}</div></div>
-<div class="kpi"><div class="label">关键词</div><div class="val mono" style="color:var(--purple)">${keywords.length}</div><div class="sub">${(tKV/10000).toFixed(0)}万</div></div></div>
-<div id="tc"></div><div class="footer"><span>⚡ 领星ERP→Claude MCP→Supabase→Vercel</span><span>${stores.length}店·${tD}天·5min刷新</span></div>`;rT()}
-function sw(t){tab=t;render()}function ss(sid){selSid=sid;render()}function ds(k){if(sK===k)sD=!sD;else{sK=k;sD=true}render()}
-function rT(){const el=document.getElementById('tc');if(!el)return;({overview:rO,trend:rTr,campaigns:rCa,asin:rA,keywords:rK})[tab]?.(el)}
+function gC(sid){const days=D.bS[sid]||[];const mD=days.length?days.reduce((a,b)=>a.report_date>b.report_date?a:b).report_date:'';const cut=mD?new Date(new Date(mD)-6*864e5).toISOString().slice(0,10):'';const rc=days.filter(r=>r.report_date>=cut);const bC={};rc.forEach(r=>{if(!bC[r.campaign_id])bC[r.campaign_id]={id:r.campaign_id,cost:0,sales:0,orders:0,imp:0,clicks:0};const c=bC[r.campaign_id];c.cost+=Number(r.cost);c.sales+=Number(r.sales);c.orders+=r.orders;c.imp+=Number(r.impressions);c.clicks+=Number(r.clicks)});return Object.values(bC).map(c=>({...c,acos:c.sales>0?c.cost/c.sales:null,roas:c.cost>0?Math.round(c.sales/c.cost*100)/100:0,cpc:c.clicks>0?Math.round(c.cost/c.clicks*100)/100:0,name:D.cN[c.id]||'SP-#'+String(c.id).slice(-6)}))}
 
-function rO(el){const{stores}=D;el.innerHTML=`<div class="card"><div class="card-head"><span>📊 店铺广告覆盖</span><span class="info">${stores[0]?.first_date}→${stores[0]?.last_date}</span></div><div style="overflow-x:auto"><table><thead><tr><th>店铺</th><th>天数</th><th>ACOS</th><th>花费</th><th>销售</th><th>订单</th><th>日均</th><th>状态</th></tr></thead><tbody>${stores.map(s=>{const d=s.total_days>=14,p=Math.round(s.total_days/14*100);return`<tr><td style="font-weight:600">${s.store}</td><td><span class="mono" style="font-weight:700;${d?'color:var(--green)':'color:var(--accent)'}">${s.total_days}/14</span><div class="pb"><div class="pb-f" style="width:${p}%;background:${d?'var(--green)':'var(--accent)'}"></div></div></td><td class="mono" style="${s.acos_pct?aC(s.acos_pct):''}">${s.acos_pct?fPn(s.acos_pct):'—'}</td><td class="mono">${f$(s.total_cost)}</td><td class="mono" style="color:var(--green)">${f$(s.total_sales)}</td><td class="mono">${s.total_orders}</td><td class="mono" style="color:var(--muted)">${f$(s.avg_daily_cost)}/d</td><td><span class="tag ${d?'tag-done':'tag-partial'}">${d?'✅完成':'⏳进行'}</span></td></tr>`}).join('')}</tbody></table></div></div>`}
+function mkSB(ss){
+  const g={};ss.forEach(s=>{if(!g[s.region])g[s.region]=[];g[s.region].push(s)});
+  return['US','CA','UK','EU'].filter(r=>g[r]).map(r=>'<span style="font-size:8px;color:'+rClr(r)+';margin:0 1px">'+r+':</span>'+g[r].sort((a,b)=>Number(b.total_cost)-Number(a.total_cost)).map(s=>'<button class="sb '+(selSid==s.sid?'on':'')+'" onclick="ss2('+s.sid+')">'+sN(s.store)+'</button>').join('')).join(' ');
+}
 
-function rTr(el){const{stores,bS}=D;const days=bS[selSid]||[];const bD={};days.forEach(r=>{if(!bD[r.report_date])bD[r.report_date]={c:0,s:0,o:0};const d=bD[r.report_date];d.c+=Number(r.cost);d.s+=Number(r.sales);d.o+=r.orders});
-const sd=Object.entries(bD).sort((a,b)=>a[0].localeCompare(b[0]));const lb=sd.map(([d])=>d.slice(5)),co=sd.map(([,v])=>Math.round(v.c)),sl=sd.map(([,v])=>Math.round(v.s)),ac=sd.map(([,v])=>v.s>0?Math.round(v.c/v.s*1000)/10:null);
-const tC=co.reduce((s,v)=>s+v,0),tS=sl.reduce((s,v)=>s+v,0),tO=sd.reduce((s,[,v])=>s+v.o,0);
-el.innerHTML=`<div class="card"><div class="card-head"><span>📈 广告趋势</span><div style="display:flex;gap:4px;flex-wrap:wrap">${stores.map(s=>`<button class="sb ${selSid==s.sid?'on':''}" onclick="ss(${s.sid})">${s.store.replace(/-US$/,'').replace(/DUANGCE\(|\)_US/g,'')}(${s.total_days}d)</button>`).join('')}</div></div>
-<div style="padding:10px 18px;font-size:12px;color:var(--muted)">花费<b class="mono" style="color:var(--text)">${f$(tC)}</b>·销售<b class="mono" style="color:var(--green)">${f$(tS)}</b>·${tO}单·ACOS<b class="mono" style="${aC(tS>0?tC/tS*100:0)}">${tS>0?fPn(tC/tS*100):'—'}</b></div>
-<div class="chart-wrap"><canvas id="tCh"></canvas></div></div>
-${(()=>{const cs=gC(selSid);const sd2=[...cs].sort((a,b)=>sD?(b[sK]||0)-(a[sK]||0):(a[sK]||0)-(b[sK]||0));const mx2=Math.max(...cs.map(c=>c.cost),1);const SA2=k=>'<span style="font-size:9px;margin-left:2px;opacity:.5">'+(sK===k?(sD?'▼':'▲'):'')+'</span>';const tC2=cs.reduce((s,c)=>s+c.cost,0),tS2=cs.reduce((s,c)=>s+c.sales,0),tO2=cs.reduce((s,c)=>s+c.orders,0);return cs.length?'<div class="card"><div class="card-head"><span>📋 Campaign明细 (近7天)</span><span class="info">花费'+f$(tC2)+'·销售'+f$(tS2)+'·'+tO2+'单·ACOS '+(tS2>0?fP(tC2/tS2):'—')+'</span></div><div style="overflow-x:auto"><table><thead><tr><th>Campaign</th><th>状态</th><th style="text-align:right" onclick="ds(\'imp\')">展示'+SA2('imp')+'</th><th style="text-align:right" onclick="ds(\'clicks\')">点击'+SA2('clicks')+'</th><th style="text-align:right" onclick="ds(\'cost\')">花费'+SA2('cost')+'</th><th style="text-align:right" onclick="ds(\'sales\')">销售'+SA2('sales')+'</th><th style="text-align:right" onclick="ds(\'acos\')">ACOS'+SA2('acos')+'</th><th style="text-align:right" onclick="ds(\'roas\')">ROAS'+SA2('roas')+'</th><th style="min-width:50px">占比</th></tr></thead><tbody>'+sd2.map(c=>{const h=hTag(c);return'<tr><td><div style="font-weight:500;font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+c.name+'</div></td><td>'+(h?'<span class="tag '+h.c+'">'+h.l+'</span>':'')+'</td><td style="text-align:right;color:var(--muted)" class="mono">'+c.imp.toLocaleString()+'</td><td style="text-align:right;color:var(--muted)" class="mono">'+c.clicks+'</td><td style="text-align:right;font-weight:600" class="mono">$'+c.cost.toFixed(2)+'</td><td style="text-align:right;'+(c.sales>0?'color:var(--green);font-weight:600':'color:var(--dim)')+'" class="mono">'+(c.sales>0?'$'+c.sales.toFixed(2):'—')+'</td><td style="text-align:right;font-weight:600;'+aCr(c.acos)+'" class="mono">'+(c.acos!=null?fP(c.acos):'—')+'</td><td style="text-align:right;'+(c.roas>0?'color:var(--purple)':'color:var(--dim)')+'" class="mono">'+(c.roas>0?c.roas+'x':'—')+'</td><td><div style="width:100%;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:'+(c.cost/mx2*100).toFixed(1)+'%;height:100%;border-radius:2px;background:'+(c.sales>0?'linear-gradient(90deg,var(--blue),var(--green))':'var(--blue)')+'"></div></div></td></tr>'}).join('')+'</tbody></table></div></div>':''})()}`;
-if(cI)cI.destroy();const ctx=document.getElementById('tCh');if(ctx)cI=new Chart(ctx,{type:'bar',data:{labels:lb,datasets:[{label:'销售',data:sl,backgroundColor:'#10b98160',borderRadius:5,order:2},{label:'花费',data:co,backgroundColor:'#ef444460',borderRadius:5,order:2},{label:'ACOS%',data:ac,type:'line',borderColor:'#f59e0b',borderWidth:2,pointRadius:3,pointBackgroundColor:'#f59e0b',yAxisID:'y1',order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#64748b',font:{size:10}}}},scales:{x:{ticks:{color:'#475569',font:{size:10}},grid:{color:'#1a234040'}},y:{ticks:{color:'#475569',font:{size:10},callback:v=>'$'+v},grid:{color:'#1a234040'}},y1:{position:'right',min:0,max:60,ticks:{color:'#f59e0b',font:{size:10},callback:v=>v+'%'},grid:{display:false}}}}})}
+function render(){
+  const ss=fS();const rC={};D.stores.forEach(s=>{rC[s.region]=(rC[s.region]||0)+1});
+  const tC=ss.reduce((s,r)=>s+Number(r.total_cost),0),tS=ss.reduce((s,r)=>s+Number(r.total_sales),0),tO=ss.reduce((s,r)=>s+Number(r.total_orders),0);
+  const now=new Date().toLocaleString('zh-CN',{timeZone:'America/Los_Angeles'});
+  document.getElementById('app').innerHTML=`
+  <div class="header"><div><h1>Amazon 数据中台</h1><div class="sub"><span class="live-dot"></span>全球${D.stores.length}店铺·${ss[0]?.last_date||'—'}·${now}</div></div>
+  <div class="tabs">${Object.entries(TABS).map(([k,v])=>'<button class="'+(tab===k?'on':'')+'" onclick="sw(\''+k+'\')">'+v+'</button>').join('')}</div></div>
+  ${['overview','trend','campaigns'].includes(tab)?`<div class="region-bar">${['ALL','US','CA','UK','EU'].map(r=>'<button class="rb '+(selRegion===r?'on':'')+'" onclick="sr(\''+r+'\')">'+RG[r].i+' '+RG[r].l+'<span class="rc">'+(r==='ALL'?D.stores.length:(rC[r]||0))+'</span></button>').join('')}</div>`:''}
+  <div class="kpi-grid">
+  <div class="kpi"><div class="label">活跃店铺</div><div class="val mono" style="color:var(--green)">${ss.length}</div><div class="sub">${selRegion==='ALL'?['US','CA','UK','EU'].filter(r=>rC[r]).map(r=>'<span style="color:'+rClr(r)+'">'+r+':'+rC[r]+'</span>').join(' · '):'筛选: '+selRegion}</div></div>
+  <div class="kpi"><div class="label">总花费</div><div class="val mono" style="color:var(--accent)">${f$(tC)}</div></div>
+  <div class="kpi"><div class="label">总销售</div><div class="val mono" style="color:var(--green)">${f$(tS)}</div><div class="sub">${tO}单</div></div>
+  <div class="kpi"><div class="label">ACOS</div><div class="val mono" style="${aC(tS>0?tC/tS*100:0)}">${tS>0?fPn(tC/tS*100):'—'}</div><div class="sub">ROAS ${tC>0?(tS/tC).toFixed(1):0}x</div></div>
+  <div class="kpi"><div class="label">ASIN</div><div class="val mono" style="color:var(--blue)">${D.asins.length}</div></div>
+  <div class="kpi"><div class="label">关键词</div><div class="val mono" style="color:var(--purple)">${D.kws.length}</div><div class="sub">${(D.kws.reduce((s,k)=>s+k.search_volume,0)/10000).toFixed(0)}万搜索量</div></div>
+  </div>
+  <div id="tc"></div>
+  <div class="footer"><span>⚡ VPS自动同步(89店)→领星API→Supabase→Vercel</span><span>${now}</span></div>`;
+  rT();
+}
+function sw(t){tab=t;render()}function sr(r){selRegion=r;render()}function ss2(sid){selSid=sid;render()}function ds(k){if(sK===k)sD=!sD;else{sK=k;sD=true}render()}
+function rT(){const el=document.getElementById('tc');if(!el)return;({overview:rO,trend:rTr,campaigns:rCa,matrix:rMx,keywords:rKw,regions:rRg,sync:rSy})[tab]?.(el)}
 
-function rCa(el){const{stores}=D;const cs=gC(selSid);const sd=[...cs].sort((a,b)=>sD?(b[sK]||0)-(a[sK]||0):(a[sK]||0)-(b[sK]||0));const mx=Math.max(...cs.map(c=>c.cost),1);
-const sn=stores.find(s=>s.sid==selSid)?.store||'';const tC=cs.reduce((s,c)=>s+c.cost,0),tS=cs.reduce((s,c)=>s+c.sales,0),tO=cs.reduce((s,c)=>s+c.orders,0),tK=cs.reduce((s,c)=>s+c.clicks,0);
-const SA=k=>`<span style="font-size:9px;margin-left:2px;opacity:.5">${sK===k?(sD?'▼':'▲'):''}</span>`;
-// v4 洞察数据
-const burnKings=cs.filter(c=>c.cost>0&&c.orders===0).sort((a,b)=>b.cost-a.cost).slice(0,5);
-const totalWaste=burnKings.reduce((s,c)=>s+c.cost,0);
-const lowStars=cs.filter(c=>c.orders>0&&c.acos!=null&&c.acos<.30).sort((a,b)=>a.cost-b.cost).slice(0,5);
-const worst=cs.filter(c=>(c.acos!=null&&c.acos>.35)||(c.cost>3&&c.orders===0)).sort((a,b)=>b.cost-a.cost);
-const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
-const cS={p:'padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(15,23,42,.6);margin-bottom:6px'};
-// 智能建议
-const tips=[];
-if(burnKings.length)tips.push({i:'🔥',t:`${burnKings.length}个Campaign共烧$${totalWaste.toFixed(0)}零出单，占总花费${tC>0?((totalWaste/tC)*100).toFixed(0):0}%。建议检查关键词精准度或暂停。`});
-if(lowStars.length)tips.push({i:'💎',t:`${lowStars.length}个Campaign出单好但花费低（如"${lowStars[0].name}"仅花$${lowStars[0].cost.toFixed(0)}）。建议提高竞价放大利润。`});
-const hcNs=cs.filter(c=>c.cpc>1.5&&c.orders===0);if(hcNs.length)tips.push({i:'💸',t:`${hcNs.length}个Campaign CPC>$1.50但没出单。建议降低竞价或优化listing转化率。`});
-if(tK>50&&tO/tK<.05)tips.push({i:'🎯',t:`整体转化率${(tO/tK*100).toFixed(1)}%，低于行业平均(~8%)。建议A/B测试主图、价格、五点描述。`});
-if(!tips.length)tips.push({i:'✅',t:'当前广告结构健康，无明显问题。'});
-// 饼图颜色
-const PC=['#3b82f6','#8b5cf6','#ec4899','#f97316','#22c55e','#06b6d4','#eab308','#ef4444','#a78bfa','#f472b6','#34d399','#fb923c'];
-const pieData=sd.slice(0,8).map((c,i)=>({name:c.name,val:c.cost,clr:PC[i%PC.length]}));
-el.innerHTML=`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px">${stores.map(s=>`<button class="sb ${selSid==s.sid?'on':''}" onclick="ss(${s.sid})">${s.store.replace(/-US$/,'')}(${s.total_days}d)</button>`).join('')}</div>
-<!-- 🔥 烧钱王 + ⚡ 预算不足 双栏 -->
-<div class="grid-2">
-<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:#f87171;margin-bottom:10px">🔥 烧钱王 — 花钱不出单 TOP5</div>
-${burnKings.length===0?'<div style="font-size:11px;color:var(--dim);padding:8px">所有Campaign都有出单 🎉</div>':
-burnKings.map((c,i)=>`<div style="${cS.p}"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:11px;font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${medals[i]} ${c.name}</div><span class="mono" style="font-size:13px;font-weight:700;color:#f87171">$${c.cost.toFixed(2)}</span></div><div style="font-size:10px;color:var(--muted);margin-top:3px">${c.imp.toLocaleString()}展示·${c.clicks}点击·CPC $${c.cpc}·零出单</div></div>`).join('')}
-${burnKings.length?`<div style="font-size:10px;color:#f87171;font-weight:600;margin-top:4px">⚠ 浪费总额: $${totalWaste.toFixed(0)}（占总花费${tC>0?((totalWaste/tC)*100).toFixed(0):0}%）</div>`:''}
-</div>
-<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:#fbbf24;margin-bottom:10px">⚡ 预算不足 & 缺失广告</div>
-${lowStars.length?`<div style="font-size:10px;color:var(--muted);font-weight:600;margin-bottom:6px">💰 出单好但花费低，建议加预算：</div>`+lowStars.map(c=>`<div style="${cS.p}"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:11px;font-weight:500;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.name}</div><div style="font-size:11px"><span style="color:#fbbf24;font-weight:600">花$${c.cost.toFixed(0)}</span> <span style="color:var(--green)">ROAS${c.roas}x</span></div></div><div style="font-size:10px;color:var(--muted);margin-top:3px">ACOS ${c.acos!=null?fP(c.acos):'—'}·${c.orders}单·$${c.sales.toFixed(0)}销售</div></div>`).join(''):'<div style="font-size:11px;color:var(--dim);padding:4px 0 8px">暂无低花费高效Campaign</div>'}
-<div style="font-size:10px;color:var(--muted);font-weight:600;margin:8px 0 6px">🕳️ 广告结构检测：</div>
-<div style="display:flex;gap:6px;flex-wrap:wrap">${['Auto','Broad','Exact','ASIN定向'].map(t=>{const ok=cs.some(c=>c.name.toLowerCase().includes(t.toLowerCase().replace('asin定向','asin')));return`<span class="tag" style="background:${ok?'#052e16':'#450a0a'};color:${ok?'#4ade80':'#f87171'};padding:3px 10px">${ok?'✅':'❌'} ${t}</span>`}).join('')}
-</div></div></div>
-<!-- 💀 需优化 Campaign -->
-<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:#f87171;margin-bottom:10px">💀 需优化 — ACOS>35%或花费>$3无出单（共${worst.length}个）</div>
-${worst.length===0?'<div style="font-size:11px;color:var(--dim)">所有Campaign表现正常 🎉</div>':
-`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:6px">${worst.slice(0,10).map(c=>{const rs=c.orders===0?'零出单':'ACOS '+(c.acos!=null?fP(c.acos):'');return`<div style="${cS.p};border-color:#422006"><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:11px;font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.name}</div><span class="tag" style="background:${c.orders===0?'#450a0a':'#422006'};color:${c.orders===0?'#f87171':'#fbbf24'}">${rs}</span></div><div style="font-size:10px;color:var(--muted);margin-top:3px">花费$${c.cost.toFixed(2)}·${c.imp.toLocaleString()}展示·${c.clicks}点击·CPC $${c.cpc}</div></div>`}).join('')}</div>`}
-</div>
-<!-- 💡 智能建议 -->
-<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:#93c5fd;margin-bottom:10px">💡 智能建议 — ${sn}</div>
-<div style="display:flex;flex-direction:column;gap:8px">${tips.map(t=>`<div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.6"><span style="font-size:16px;flex-shrink:0">${t.i}</span><span style="color:#cbd5e1">${t.t}</span></div>`).join('')}</div></div>
-<!-- 花费分布饼图 -->
-<div class="card" style="padding:16px"><div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:12px">🍩 花费分布 Top 8</div>
-<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:center">
-<canvas id="pieC" width="240" height="240" style="max-width:240px"></canvas>
-<div style="font-size:11px;line-height:2.2">${pieData.map(p=>`<div style="display:flex;align-items:center;gap:6px"><div style="width:10px;height:10px;border-radius:2px;background:${p.clr};flex-shrink:0"></div><span style="color:var(--muted);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.name}</span><span class="mono" style="color:var(--text);font-weight:600;margin-left:auto">$${p.val.toFixed(0)}</span></div>`).join('')}</div>
-</div></div>
-<!-- ⚡ 快捷指令 -->
-<div class="card" style="padding:14px 18px"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px">⚡ 快捷分析 — 点击复制到 Claude</div><div style="display:flex;flex-wrap:wrap">${[
-'帮我分析'+sn+'最近的搜索词报表，找出浪费花费的词和值得加大投放的词',
-'帮我拉取'+sn+'最近7天SP广告数据并更新Supabase，给一份周度分析报告',
-'对比分析多个店铺的广告效率，给出优化建议',
-'帮我检查'+sn+'的FBA库存情况，有没有断货风险或滞销品',
-'用Sellersprite分析dewalt 20v battery关键词市场数据，评估投放价值',
-'生成SP六架构广告方案'
-].map(q=>`<button class="qb" onclick="navigator.clipboard.writeText(this.textContent);this.style.borderColor='var(--green)';this.style.color='var(--green)';setTimeout(()=>{this.style.borderColor='';this.style.color=''},1500)">${q}</button>`).join('')}</div></div>`;
-// 渲染饼图
-const pCtx=document.getElementById('pieC');
-if(pCtx&&pieData.length){let total=pieData.reduce((s,p)=>s+p.val,0);let startAngle=-Math.PI/2;const ctx2=pCtx.getContext('2d');const cx=120,cy=120,R=100,r=45;
-pieData.forEach(p=>{const slice=p.val/total*Math.PI*2;ctx2.beginPath();ctx2.moveTo(cx+r*Math.cos(startAngle),cy+r*Math.sin(startAngle));ctx2.arc(cx,cy,R,startAngle,startAngle+slice);ctx2.arc(cx,cy,r,startAngle+slice,startAngle,true);ctx2.closePath();ctx2.fillStyle=p.clr;ctx2.fill();ctx2.strokeStyle='#080c14';ctx2.lineWidth=2;ctx2.stroke();startAngle+=slice});
-}}
+// ===== Tab 1: 总览 =====
+function rO(el){
+  const ss=fS();const g={};ss.forEach(s=>{if(!g[s.region])g[s.region]=[];g[s.region].push(s)});
+  el.innerHTML=['US','CA','UK','EU'].filter(r=>g[r]).map(r=>{
+    const gs=g[r];const tC=gs.reduce((s,x)=>s+Number(x.total_cost),0),tS=gs.reduce((s,x)=>s+Number(x.total_sales),0),tO=gs.reduce((s,x)=>s+Number(x.total_orders),0);
+    return'<div class="card"><div class="card-head"><span>'+RG[r]?.i+' '+RG[r]?.l+' ('+gs.length+'店)</span><span class="info">花费'+f$(tC)+'·销售'+f$(tS)+'·'+tO+'单·ACOS '+(tS>0?fPn(tC/tS*100):'—')+'</span></div><div style="overflow-x:auto"><table><thead><tr><th>店铺</th><th>天数</th><th>ACOS</th><th style="text-align:right">花费</th><th style="text-align:right">销售</th><th style="text-align:right">订单</th><th>日均</th></tr></thead><tbody>'+gs.sort((a,b)=>Number(b.total_cost)-Number(a.total_cost)).map(s=>{const a=s.acos_pct;return'<tr class="rg-'+r.toLowerCase()+'"><td style="font-weight:600;font-size:10px">'+sN(s.store)+'</td><td class="mono" style="font-size:10px">'+s.total_days+'d</td><td class="mono" style="'+(a?aC(a):'')+';font-size:10px">'+(a?fPn(a):'—')+'</td><td class="mono" style="text-align:right;font-size:10px">'+f$(s.total_cost)+'</td><td class="mono" style="text-align:right;color:var(--green);font-size:10px">'+f$(s.total_sales)+'</td><td class="mono" style="text-align:right;font-size:10px">'+s.total_orders+'</td><td class="mono" style="font-size:9px;color:var(--muted)">'+f$(s.avg_daily_cost)+'/d</td></tr>'}).join('')+'</tbody></table></div></div>'}).join('');
+}
 
-function rA(el){const{asins}=D;const tC=t=>t==='hero'?'var(--accent)':t==='standard'?'var(--blue)':'var(--dim)';el.innerHTML=`<div class="card"><div class="card-head"><span>📦 ASIN目录</span><span class="info">${asins.length}活跃</span></div><div style="overflow-x:auto"><table><thead><tr><th>Tier</th><th>ASIN</th><th>产品线</th><th>价格</th><th>评分</th><th>评论</th><th>BSR</th><th>月销</th><th>月收入</th></tr></thead><tbody>${asins.filter(a=>a.monthly_sales>0||a.tier!=='tail').slice(0,30).map(a=>`<tr><td><span style="color:${tC(a.tier)};font-weight:700;font-size:10px;text-transform:uppercase">${a.tier}</span></td><td class="mono" style="font-size:11px">${a.asin}</td><td style="font-size:11px">${a.product_line||'—'}</td><td class="mono">${a.price?'$'+Number(a.price).toFixed(0):'—'}</td><td class="mono">${a.rating||'—'}</td><td class="mono">${a.review_count||0}</td><td class="mono">${a.bsr_rank?'#'+Number(a.bsr_rank).toLocaleString():'—'}</td><td class="mono" style="color:var(--green);font-weight:600">${a.monthly_sales||0}</td><td class="mono" style="color:var(--green)">${a.monthly_revenue?f$(a.monthly_revenue):'—'}</td></tr>`).join('')}</tbody></table></div></div>`}
+// ===== Tab 2: 广告趋势 =====
+function rTr(el){
+  const ss=fS();const days=D.bS[selSid]||[];const bD={};days.forEach(r=>{if(!bD[r.report_date])bD[r.report_date]={c:0,s:0,o:0};const d=bD[r.report_date];d.c+=Number(r.cost);d.s+=Number(r.sales);d.o+=r.orders});
+  const sd=Object.entries(bD).sort((a,b)=>a[0].localeCompare(b[0]));const lb=sd.map(([d])=>d.slice(5)),co=sd.map(([,v])=>Math.round(v.c)),sl=sd.map(([,v])=>Math.round(v.s)),ac=sd.map(([,v])=>v.s>0?Math.round(v.c/v.s*1000)/10:null);
+  const tC=co.reduce((s,v)=>s+v,0),tS=sl.reduce((s,v)=>s+v,0),tO=sd.reduce((s,[,v])=>s+v.o,0);
+  const cur=D.stores.find(s=>s.sid===selSid);
+  el.innerHTML='<div class="card"><div class="card-head"><span>📈 广告趋势 '+(cur?rTag(cur.region):'')+'</span></div><div style="padding:6px 12px;display:flex;gap:2px;flex-wrap:wrap;align-items:center">'+mkSB(ss)+'</div><div style="padding:4px 14px;font-size:11px;color:var(--muted)">花费<b class="mono" style="color:var(--text)">'+f$(tC)+'</b> · 销售<b class="mono" style="color:var(--green)">'+f$(tS)+'</b> · '+tO+'单 · ACOS<b class="mono" style="'+aC(tS>0?tC/tS*100:0)+'">'+(tS>0?fPn(tC/tS*100):'—')+'</b></div><div class="chart-wrap"><canvas id="tCh"></canvas></div></div>'+
+  (()=>{const cs=gC(selSid);if(!cs.length)return'';const sd2=[...cs].sort((a,b)=>sD?(b[sK]||0)-(a[sK]||0):(a[sK]||0)-(b[sK]||0));const mx=Math.max(...cs.map(c=>c.cost),1);const SA=k=>'<span style="font-size:8px;margin-left:1px;opacity:.5">'+(sK===k?(sD?'▼':'▲'):'')+'</span>';const tC2=cs.reduce((s,c)=>s+c.cost,0),tS2=cs.reduce((s,c)=>s+c.sales,0),tO2=cs.reduce((s,c)=>s+c.orders,0);return'<div class="card"><div class="card-head"><span>📋 Campaign明细 (近7天)</span><span class="info">花费'+f$(tC2)+'·销售'+f$(tS2)+'·'+tO2+'单</span></div><div style="overflow-x:auto"><table><thead><tr><th>Campaign</th><th>状态</th><th style="text-align:right" onclick="ds(\'imp\')">展示'+SA('imp')+'</th><th style="text-align:right" onclick="ds(\'clicks\')">点击'+SA('clicks')+'</th><th style="text-align:right" onclick="ds(\'cost\')">花费'+SA('cost')+'</th><th style="text-align:right" onclick="ds(\'sales\')">销售'+SA('sales')+'</th><th style="text-align:right" onclick="ds(\'acos\')">ACOS'+SA('acos')+'</th><th style="text-align:right" onclick="ds(\'roas\')">ROAS'+SA('roas')+'</th></tr></thead><tbody>'+sd2.map(c=>{const h=hTag(c);return'<tr><td><div style="font-weight:500;font-size:10px;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+c.name+'</div></td><td>'+(h?'<span class="tag '+h.c+'">'+h.l+'</span>':'')+'</td><td style="text-align:right;color:var(--muted)" class="mono">'+c.imp.toLocaleString()+'</td><td style="text-align:right" class="mono">'+c.clicks+'</td><td style="text-align:right;font-weight:600" class="mono">$'+c.cost.toFixed(2)+'</td><td style="text-align:right;'+(c.sales>0?'color:var(--green);font-weight:600':'color:var(--dim)')+'" class="mono">'+(c.sales>0?'$'+c.sales.toFixed(2):'—')+'</td><td style="text-align:right;font-weight:600;'+aCr(c.acos)+'" class="mono">'+(c.acos!=null?fP(c.acos):'—')+'</td><td style="text-align:right;'+(c.roas>0?'color:var(--purple)':'color:var(--dim)')+'" class="mono">'+(c.roas>0?c.roas+'x':'—')+'</td></tr>'}).join('')+'</tbody></table></div></div>'})();
+  if(cI)cI.destroy();const ctx=document.getElementById('tCh');if(ctx)cI=new Chart(ctx,{type:'bar',data:{labels:lb,datasets:[{label:'销售',data:sl,backgroundColor:'#10b98160',borderRadius:4,order:2},{label:'花费',data:co,backgroundColor:'#ef444460',borderRadius:4,order:2},{label:'ACOS%',data:ac,type:'line',borderColor:'#f59e0b',borderWidth:2,pointRadius:2,pointBackgroundColor:'#f59e0b',yAxisID:'y1',order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#64748b',font:{size:9}}}},scales:{x:{ticks:{color:'#475569',font:{size:9}},grid:{color:'#1a234020'}},y:{ticks:{color:'#475569',font:{size:9},callback:v=>'$'+v},grid:{color:'#1a234020'}},y1:{position:'right',min:0,max:80,ticks:{color:'#f59e0b',font:{size:9},callback:v=>v+'%'},grid:{display:false}}}}});
+}
 
-function rK(el){const{keywords}=D;const bL={};keywords.forEach(k=>{if(!bL[k.product_line])bL[k.product_line]={n:0,v:0,h:0};bL[k.product_line].n++;bL[k.product_line].v+=k.search_volume;if(k.priority==='high')bL[k.product_line].h++});const ls=Object.entries(bL).sort((a,b)=>b[1].v-a[1].v);const mV=ls[0]?.[1].v||1;
-el.innerHTML=`<div class="grid-2"><div class="card"><div class="card-head"><span>🔑 产品线搜索量</span></div><div style="padding:16px">${ls.map(([n,d])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between"><span style="font-weight:600;font-size:12px">${n}</span><span class="mono" style="color:var(--cyan);font-size:11px">${(d.v/1000).toFixed(0)}K</span></div><div style="width:100%;height:4px;background:var(--border);border-radius:2px;margin-top:3px"><div style="width:${d.v/mV*100}%;height:100%;background:var(--cyan);border-radius:2px"></div></div><div style="font-size:10px;color:var(--muted);margin-top:2px">${d.n}词·${d.h}高优</div></div>`).join('')}</div></div>
-<div class="card"><div class="card-head"><span>📋 Top25</span></div><div style="overflow-x:auto"><table><thead><tr><th>关键词</th><th>产品线</th><th>月搜索</th><th>优先级</th></tr></thead><tbody>${keywords.slice(0,25).map(k=>`<tr><td style="font-size:11px">${k.keyword}</td><td class="mono" style="font-size:11px">${k.product_line}</td><td class="mono" style="color:var(--cyan)">${(k.search_volume/1000).toFixed(1)}K</td><td><span class="tag" style="background:${k.priority==='high'?'#ef444420':'#3b82f620'};color:${k.priority==='high'?'var(--red)':'var(--blue)'}">${k.priority}</span></td></tr>`).join('')}</tbody></table></div></div></div>`}
+// ===== Tab 3: Campaign诊断 =====
+function rCa(el){
+  const ss=fS();const cs=gC(selSid);const sn=D.stores.find(s=>s.sid==selSid)?.store||'';const cur=D.stores.find(s=>s.sid===selSid);
+  const tC=cs.reduce((s,c)=>s+c.cost,0),tS=cs.reduce((s,c)=>s+c.sales,0),tO=cs.reduce((s,c)=>s+c.orders,0),tK=cs.reduce((s,c)=>s+c.clicks,0);
+  const bk=cs.filter(c=>c.cost>0&&c.orders===0).sort((a,b)=>b.cost-a.cost).slice(0,5);
+  const tw=bk.reduce((s,c)=>s+c.cost,0);
+  const ls=cs.filter(c=>c.orders>0&&c.acos!=null&&c.acos<.30).sort((a,b)=>a.cost-b.cost).slice(0,5);
+  const worst=cs.filter(c=>(c.acos!=null&&c.acos>.35)||(c.cost>3&&c.orders===0)).sort((a,b)=>b.cost-a.cost);
+  const tips=[];
+  if(bk.length)tips.push({i:'🔥',t:bk.length+'个Campaign共烧$'+tw.toFixed(0)+'零出单，占总花费'+(tC>0?((tw/tC)*100).toFixed(0):0)+'%'});
+  if(ls.length)tips.push({i:'💎',t:ls.length+'个高效Campaign出单好但花费低，建议加预算'});
+  const hc=cs.filter(c=>c.cpc>1.5&&c.orders===0);if(hc.length)tips.push({i:'💸',t:hc.length+'个Campaign CPC>$1.50但没出单'});
+  if(tK>50&&tO/tK<.05)tips.push({i:'🎯',t:'整体转化率'+(tO/tK*100).toFixed(1)+'%，低于行业均值'});
+  if(!tips.length)tips.push({i:'✅',t:'广告结构健康'});
+  const md=['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const cS='padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:rgba(15,23,42,.6);margin-bottom:4px';
+  const PC=['#3b82f6','#8b5cf6','#ec4899','#f97316','#22c55e','#06b6d4','#eab308','#ef4444'];
+  const sd=[...cs].sort((a,b)=>b.cost-a.cost);const pie=sd.slice(0,8).map((c,i)=>({n:c.name,v:c.cost,c:PC[i%8]}));
+  el.innerHTML='<div style="display:flex;gap:2px;flex-wrap:wrap;margin-bottom:8px;align-items:center">'+mkSB(ss)+'</div><div style="font-size:11px;color:var(--muted);margin-bottom:10px">'+(cur?RG[cur.region]?.i+' ':'')+sn+' · 花费'+f$(tC)+' · 销售'+f$(tS)+' · '+tO+'单 · ACOS '+(tS>0?fP(tC/tS):'—')+'</div>'+
+  '<div class="grid-2"><div class="card" style="padding:12px"><div style="font-size:11px;font-weight:600;color:#f87171;margin-bottom:6px">🔥 烧钱王 TOP5</div>'+(bk.length===0?'<div style="font-size:10px;color:var(--dim)">所有Campaign都有出单 🎉</div>':bk.map((c,i)=>'<div style="'+cS+'"><div style="display:flex;justify-content:space-between"><div style="font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+md[i]+' '+c.name+'</div><span class="mono" style="font-size:11px;font-weight:700;color:#f87171">$'+c.cost.toFixed(2)+'</span></div><div style="font-size:9px;color:var(--muted);margin-top:1px">'+c.imp.toLocaleString()+'展·'+c.clicks+'击·CPC$'+c.cpc+'</div></div>').join(''))+(bk.length?'<div style="font-size:9px;color:#f87171;font-weight:600;margin-top:3px">⚠ 浪费$'+tw.toFixed(0)+'(占'+(tC>0?((tw/tC)*100).toFixed(0):0)+'%)</div>':'')+'</div>'+
+  '<div class="card" style="padding:12px"><div style="font-size:11px;font-weight:600;color:#fbbf24;margin-bottom:6px">⚡ 预算不足 & 广告结构</div>'+(ls.length?ls.map(c=>'<div style="'+cS+'"><div style="display:flex;justify-content:space-between"><div style="font-size:10px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+c.name+'</div><div style="font-size:10px"><span style="color:#fbbf24">花$'+c.cost.toFixed(0)+'</span> <span style="color:var(--green)">ROAS'+c.roas+'x</span></div></div></div>').join(''):'<div style="font-size:10px;color:var(--dim);margin-bottom:6px">暂无</div>')+
+  '<div style="font-size:9px;color:var(--muted);font-weight:600;margin:6px 0 4px">🕳️ 广告结构检测：</div><div style="display:flex;gap:4px;flex-wrap:wrap">'+['Auto','Broad','Exact','ASIN定向'].map(t=>{const ok=cs.some(c=>c.name.toLowerCase().includes(t.toLowerCase().replace('asin定向','asin')));return'<span class="tag" style="background:'+(ok?'#052e16':'#450a0a')+';color:'+(ok?'#4ade80':'#f87171')+';padding:2px 8px">'+(ok?'✅':'❌')+' '+t+'</span>'}).join('')+'</div></div></div>'+
+  (worst.length?'<div class="card" style="padding:12px"><div style="font-size:11px;font-weight:600;color:#f87171;margin-bottom:6px">💀 需优化 ('+worst.length+'个)</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px">'+worst.slice(0,8).map(c=>'<div style="'+cS+';border-color:#422006"><div style="display:flex;justify-content:space-between"><div style="font-size:10px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+c.name+'</div><span class="tag" style="background:'+(c.orders===0?'#450a0a':'#422006')+';color:'+(c.orders===0?'#f87171':'#fbbf24')+'">'+(c.orders===0?'零出单':'ACOS '+(c.acos!=null?fP(c.acos):''))+'</span></div></div>').join('')+'</div></div>':'')+
+  '<div class="grid-2"><div class="card" style="padding:12px"><div style="font-size:11px;font-weight:600;color:#93c5fd;margin-bottom:6px">💡 智能建议</div>'+tips.map(t=>'<div style="display:flex;gap:5px;font-size:11px;line-height:1.4;margin-bottom:4px"><span style="font-size:14px;flex-shrink:0">'+t.i+'</span><span style="color:#cbd5e1">'+t.t+'</span></div>').join('')+'</div>'+
+  '<div class="card" style="padding:12px"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px">🍩 花费分布 Top8</div><div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center"><canvas id="pieC" width="180" height="180" style="max-width:180px"></canvas><div style="font-size:10px;line-height:2">'+pie.map(p=>'<div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;border-radius:2px;background:'+p.c+';flex-shrink:0"></div><span style="color:var(--muted);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+p.n+'</span><span class="mono" style="color:var(--text);margin-left:auto">$'+p.v.toFixed(0)+'</span></div>').join('')+'</div></div></div></div>';
+  const pC=document.getElementById('pieC');
+  if(pC&&pie.length){let tot=pie.reduce((s,p)=>s+p.v,0);let sa=-Math.PI/2;const x=pC.getContext('2d');const cx=90,cy=90,R=80,ri=30;
+  pie.forEach(p=>{const sl=p.v/tot*Math.PI*2;x.beginPath();x.moveTo(cx+ri*Math.cos(sa),cy+ri*Math.sin(sa));x.arc(cx,cy,R,sa,sa+sl);x.arc(cx,cy,ri,sa+sl,sa,true);x.closePath();x.fillStyle=p.c;x.fill();x.strokeStyle='#080c14';x.lineWidth=2;x.stroke();sa+=sl})}
+}
+
+// ===== Tab 4: 产品矩阵 =====
+function rMx(el){
+  const{asins}=D;const bP={};asins.forEach(a=>{const pl=a.product_line||'未分类';if(!bP[pl])bP[pl]={n:0,h:0,s:0,t:0,rev:0,sales:0,avgP:0,sumP:0};const g=bP[pl];g.n++;g.rev+=Number(a.monthly_revenue||0);g.sales+=Number(a.monthly_sales||0);g.sumP+=Number(a.price||0);if(a.tier==='hero')g.h++;else if(a.tier==='standard')g.s++;else g.t++});
+  const pls=Object.entries(bP).sort((a,b)=>b[1].rev-a[1].rev);const mxR=pls[0]?.[1].rev||1;
+  el.innerHTML='<div class="card"><div class="card-head"><span>📦 产品线矩阵</span><span class="info">'+asins.length+'个活跃ASIN · '+pls.length+'条产品线</span></div><div style="padding:14px">'+pls.map(([n,d])=>{
+    const pctR=d.rev/mxR*100;const avgP=d.n>0?(d.sumP/d.n).toFixed(0):0;
+    return'<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center"><div><span style="font-weight:700;font-size:12px">'+n+'</span> <span style="font-size:10px;color:var(--muted)">'+d.n+'个ASIN</span></div><div class="mono" style="font-size:12px;color:var(--green);font-weight:700">'+f$(d.rev)+'/月</div></div><div style="display:flex;gap:8px;margin-top:4px;font-size:10px;color:var(--muted)">月销'+d.sales+'件 · 均价$'+avgP+' · <span style="color:var(--accent)">H:'+d.h+'</span> <span style="color:var(--blue)">S:'+d.s+'</span> <span style="color:var(--dim)">T:'+d.t+'</span></div><div style="width:100%;height:6px;background:var(--border);border-radius:3px;margin-top:4px"><div class="bar-h" style="width:'+pctR+'%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div></div>'}).join('')+'</div></div>'+
+  '<div class="card"><div class="card-head"><span>📋 ASIN明细 (月收入Top30)</span></div><div style="overflow-x:auto"><table><thead><tr><th>Tier</th><th>ASIN</th><th>产品线</th><th>品牌</th><th style="text-align:right">价格</th><th style="text-align:right">评分</th><th style="text-align:right">评论</th><th style="text-align:right">BSR</th><th style="text-align:right">月销</th><th style="text-align:right">月收入</th></tr></thead><tbody>'+asins.slice(0,30).map(a=>{const tc=a.tier==='hero'?'var(--accent)':a.tier==='standard'?'var(--blue)':'var(--dim)';return'<tr><td><span style="color:'+tc+';font-weight:700;font-size:9px;text-transform:uppercase">'+a.tier+'</span></td><td class="mono" style="font-size:10px">'+a.asin+'</td><td style="font-size:10px">'+  (a.product_line||'—')+'</td><td style="font-size:10px;color:var(--muted)">'+(a.brand||'—')+'</td><td class="mono" style="text-align:right">'+(a.price?'$'+Number(a.price).toFixed(0):'—')+'</td><td class="mono" style="text-align:right">'+(a.rating||'—')+'</td><td class="mono" style="text-align:right">'+(a.review_count||0)+'</td><td class="mono" style="text-align:right">'+(a.bsr_rank?'#'+Number(a.bsr_rank).toLocaleString():'—')+'</td><td class="mono" style="text-align:right;color:var(--green);font-weight:600">'+(a.monthly_sales||0)+'</td><td class="mono" style="text-align:right;color:var(--green)">'+(a.monthly_revenue?f$(a.monthly_revenue):'—')+'</td></tr>'}).join('')+'</tbody></table></div></div>';
+}
+
+// ===== Tab 5: 关键词库 =====
+function rKw(el){
+  const{kws}=D;const bL={};kws.forEach(k=>{if(!bL[k.product_line])bL[k.product_line]={n:0,v:0,h:0};bL[k.product_line].n++;bL[k.product_line].v+=k.search_volume;if(k.priority==='high')bL[k.product_line].h++});
+  const ls=Object.entries(bL).sort((a,b)=>b[1].v-a[1].v);const mV=ls[0]?.[1].v||1;
+  el.innerHTML='<div class="grid-2"><div class="card"><div class="card-head"><span>🔑 产品线搜索量</span></div><div style="padding:14px">'+ls.map(([n,d])=>'<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between"><span style="font-weight:600;font-size:11px">'+n+'</span><span class="mono" style="color:var(--cyan);font-size:10px">'+(d.v/1000).toFixed(0)+'K</span></div><div style="width:100%;height:5px;background:var(--border);border-radius:2px;margin-top:3px"><div class="bar-h" style="width:'+d.v/mV*100+'%;background:var(--cyan)"></div></div><div style="font-size:9px;color:var(--muted);margin-top:2px">'+d.n+'词 · '+d.h+'高优</div></div>').join('')+'</div></div>'+
+  '<div class="card"><div class="card-head"><span>📋 Top关键词</span><span class="info">'+kws.length+'个</span></div><div style="overflow-x:auto"><table><thead><tr><th>关键词</th><th>产品线</th><th style="text-align:right">月搜索</th><th>类型</th><th>优先级</th></tr></thead><tbody>'+kws.slice(0,30).map(k=>'<tr><td style="font-size:10px">'+k.keyword+'</td><td class="mono" style="font-size:10px">'+k.product_line+'</td><td class="mono" style="text-align:right;color:var(--cyan)">'+(k.search_volume/1000).toFixed(1)+'K</td><td style="font-size:9px;color:var(--muted)">'+  (k.word_type||'—')+'</td><td><span class="tag" style="background:'+(k.priority==='high'?'#ef444420':'#3b82f620')+';color:'+(k.priority==='high'?'var(--red)':'var(--blue)')+'">'+k.priority+'</span></td></tr>').join('')+'</tbody></table></div></div></div>';
+}
+
+// ===== Tab 6: 区域对比 =====
+function rRg(el){
+  const rData={};D.stores.forEach(s=>{const r=s.region;if(!rData[r])rData[r]={cost:0,sales:0,orders:0,clicks:0,imp:0,stores:0};const d=rData[r];d.cost+=Number(s.total_cost);d.sales+=Number(s.total_sales);d.orders+=Number(s.total_orders);d.clicks+=Number(s.total_clicks);d.imp+=Number(s.total_impressions);d.stores++});
+  const rs=['US','CA','UK','EU'].filter(r=>rData[r]);
+  const mxC=Math.max(...rs.map(r=>rData[r].cost));
+  const mxS=Math.max(...rs.map(r=>rData[r].sales));
+
+  function bar(label,vals,mx,fmt){
+    return'<div class="card" style="padding:12px"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px">'+label+'</div>'+rs.map(r=>{const v=vals(rData[r]);const pct=mx>0?v/mx*100:0;return'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:24px;font-size:11px;font-weight:700;color:'+rClr(r)+'">'+r+'</span><div style="flex:1;height:20px;background:var(--border);border-radius:4px;overflow:hidden"><div class="bar-h" style="width:'+pct+'%;height:100%;background:'+rClr(r)+';opacity:.7"></div></div><span class="mono" style="font-size:11px;min-width:60px;text-align:right">'+fmt(v)+'</span></div>'}).join('')+'</div>'
+  }
+
+  el.innerHTML='<div class="card" style="padding:14px"><div style="font-size:12px;font-weight:700;margin-bottom:10px">🌍 四大区域核心指标</div><table><thead><tr><th>区域</th><th>店铺</th><th style="text-align:right">花费</th><th style="text-align:right">销售</th><th style="text-align:right">订单</th><th>ACOS</th><th>CPC</th><th>转化率</th></tr></thead><tbody>'+rs.map(r=>{const d=rData[r];const acos=d.sales>0?d.cost/d.sales*100:0;const cpc=d.clicks>0?d.cost/d.clicks:0;const cvr=d.clicks>0?d.orders/d.clicks*100:0;return'<tr><td style="font-weight:700;color:'+rClr(r)+'">'+RG[r].i+' '+RG[r].l+'</td><td class="mono">'+d.stores+'</td><td class="mono" style="text-align:right">'+f$(d.cost)+'</td><td class="mono" style="text-align:right;color:var(--green)">'+f$(d.sales)+'</td><td class="mono" style="text-align:right">'+d.orders+'</td><td class="mono" style="'+aC(acos)+'">'+fPn(acos)+'</td><td class="mono">$'+cpc.toFixed(2)+'</td><td class="mono" style="'+(cvr>8?'color:var(--green)':cvr>4?'':'color:var(--red)')+'">'+cvr.toFixed(1)+'%</td></tr>'}).join('')+'</tbody></table></div>'+
+  '<div class="grid-2">'+bar('💰 花费对比',d=>d.cost,mxC,v=>f$(v))+bar('📈 销售对比',d=>d.sales,mxS,v=>f$(v))+'</div>'+
+  '<div class="grid-2">'+bar('📊 ACOS对比',d=>d.sales>0?d.cost/d.sales*100:0,60,v=>v.toFixed(1)+'%')+bar('🎯 转化率对比',d=>d.clicks>0?d.orders/d.clicks*100:0,15,v=>v.toFixed(1)+'%')+'</div>';
+}
+
+// ===== Tab 7: 同步监控 =====
+function rSy(el){
+  const{logs}=D;const ok=logs.filter(l=>l.status==='success').length;const err=logs.filter(l=>l.status==='error').length;
+  const last=logs[0];const lastTime=last?new Date(last.created_at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai'}):'—';
+  el.innerHTML='<div class="grid-2"><div class="kpi" style="margin-bottom:12px"><div class="label">最后同步</div><div class="val mono" style="font-size:16px;color:var(--green)">'+lastTime+'</div><div class="sub">状态: <span class="sync-'+(last?.status||'ok')+'" style="font-weight:700">'+(last?.status||'—')+'</span></div></div><div class="kpi" style="margin-bottom:12px"><div class="label">成功率</div><div class="val mono" style="color:'+(err===0?'var(--green)':'var(--red)')+'">'+(logs.length>0?((ok/logs.length)*100).toFixed(0):0)+'%</div><div class="sub">成功'+ok+' · 失败'+err+' · 共'+logs.length+'次</div></div></div>'+
+  '<div class="card"><div class="card-head"><span>📋 同步记录 (最近15次)</span></div><div style="overflow-x:auto"><table><thead><tr><th>时间</th><th>类型</th><th>日期</th><th>状态</th><th style="text-align:right">行数</th><th>详情</th></tr></thead><tbody>'+logs.map(l=>{const t=new Date(l.created_at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});const det=l.details||{};const stores=Object.keys(det).filter(k=>det[k]?.campaigns>0).length;return'<tr><td class="mono" style="font-size:10px">'+t+'</td><td>'+l.sync_type+'</td><td class="mono">'+(l.sync_date||'—')+'</td><td><span class="sync-'+l.status+'" style="font-weight:700">'+l.status+'</span></td><td class="mono" style="text-align:right">'+(l.rows_affected||0)+'</td><td style="font-size:10px;color:var(--muted)">'+(l.status==='success'?stores+'店有数据':l.status==='error'?(det.error||'').slice(0,40):'—')+'</td></tr>'}).join('')+'</tbody></table></div></div>';
+}
 
 load();setInterval(load,300000);
 </script>
