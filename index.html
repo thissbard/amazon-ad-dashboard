@@ -62,38 +62,37 @@ function dateRange(){
   if(selPeriod==='30d')return[fmt(new Date(now-30*864e5)),fmt(now)];
   if(selPeriod==='thisM'){const s=new Date(now.getFullYear(),now.getMonth(),1);return[fmt(s),fmt(now)];}
   if(selPeriod==='lastM'){const s=new Date(now.getFullYear(),now.getMonth()-1,1);const e=new Date(now.getFullYear(),now.getMonth(),0);return[fmt(s),fmt(e)];}
-  return['2020-01-01',fmt(now)]; // all
+  return['2026-01-01',fmt(now)];
 }
 
-// 按日期+区域过滤的daily数据
-function fDaily(){
-  const[s,e]=dateRange();const allD=D.rawDaily||[];
-  return allD.filter(r=>r.report_date>=s&&r.report_date<=e);
-}
+// daily数据已在load时按日期过滤
+function fDaily(){return D.rawDaily||[];}
 
 // 从过滤后的daily数据计算店铺聚合
 function calcStores(daily){
   const sm={};const sellers=D.sellerMap||{};
   daily.forEach(r=>{
-    if(!sm[r.sid])sm[r.sid]={sid:r.sid,store:sellers[r.sid]?.name||'SID-'+r.sid,region:sellers[r.sid]?.region||'Other',total_cost:0,total_sales:0,total_orders:0,total_clicks:0,total_impressions:0,dates:new Set()};
-    const s=sm[r.sid];s.total_cost+=Number(r.cost);s.total_sales+=Number(r.sales);s.total_orders+=r.orders;s.total_clicks+=Number(r.clicks);s.total_impressions+=Number(r.impressions);s.dates.add(r.report_date);
+    const sid=String(r.sid);
+    if(!sm[sid])sm[sid]={sid:Number(r.sid),store:sellers[r.sid]?.name||sellers[sid]?.name||'SID-'+sid,region:sellers[r.sid]?.region||sellers[sid]?.region||'Other',total_cost:0,total_sales:0,total_orders:0,total_clicks:0,total_impressions:0,dates:new Set()};
+    const s=sm[sid];s.total_cost+=Number(r.cost);s.total_sales+=Number(r.sales);s.total_orders+=Number(r.orders||0);s.total_clicks+=Number(r.clicks);s.total_impressions+=Number(r.impressions);s.dates.add(r.report_date);
   });
   return Object.values(sm).map(s=>({...s,total_days:s.dates.size,acos_pct:s.total_sales>0?Math.round(s.total_cost/s.total_sales*1000)/10:null,avg_daily_cost:s.dates.size>0?Math.round(s.total_cost/s.dates.size*100)/100:0})).filter(s=>s.total_cost>0).sort((a,b)=>b.total_cost-a.total_cost);
 }
 
 async function load(){try{
+  const[dr0,dr1]=dateRange();
   const[sellers,daily,cNames,asins,kws,logs]=await Promise.all([
     Q('sellers','select=sid,name,country,has_ads'),
-    Q('ad_daily_reports','select=sid,report_date,campaign_id,cost,sales,orders,clicks,impressions&order=report_date'),
+    Q('ad_daily_reports','select=sid,report_date,campaign_id,cost,sales,orders,clicks,impressions&report_date=gte.'+dr0+'&report_date=lte.'+dr1+'&order=report_date&limit=100000'),
     Q('campaign_names','select=campaign_id,name'),
     Q('asin_catalog','select=asin,product_line,tier,price,rating,review_count,bsr_rank,monthly_sales,monthly_revenue,brand,status&status=eq.active&order=monthly_revenue.desc.nullslast&limit=200'),
     Q('keyword_tracker','select=keyword,product_line,search_volume,word_type,priority&order=search_volume.desc'),
     Q('sync_logs','select=*&order=created_at.desc&limit=15')
   ]);
-  const cN={};cNames.forEach(c=>{cN[c.campaign_id]=c.name});
+  const cN={};cNames.forEach(c=>{cN[String(c.campaign_id)]=c.name});
   const sellerMap={};sellers.forEach(s=>{
     const region=s.country==='美国'?'US':s.country==='加拿大'?'CA':s.country==='英国'?'UK':['德国','法国','意大利','西班牙','瑞典','爱尔兰'].includes(s.country)?'EU':s.country==='墨西哥'?'MX':'Other';
-    sellerMap[s.sid]={name:s.name,region};
+    sellerMap[s.sid]={name:s.name,region};sellerMap[String(s.sid)]={name:s.name,region};
   });
   D={rawDaily:daily,sellerMap,cN,asins,kws,logs,allSellers:sellers};
   const stores=calcStores(fDaily());
@@ -111,14 +110,14 @@ const sN=n=>n.replace(/-US$|-CA$|-UK$|-DE$|-FR$|-IT$|-ES$|-SE$|-IE$|-MX$/,'');
 function hTag(c){if(c.sales>0&&c.acos!=null&&c.acos<.15)return{l:'🌟明星',c:'tag-star'};if(c.sales>0&&c.acos!=null&&c.acos<.30)return{l:'✅健康',c:'tag-ok'};if(c.sales>0&&c.acos!=null&&c.acos<.45)return{l:'⚠️关注',c:'tag-warn'};if(c.cost>5&&c.orders===0)return{l:'🔴浪费',c:'tag-waste'};if(c.cost>0&&c.orders===0)return{l:'❄️冷启',c:'tag-cold'};if(c.sales>0)return{l:'⚠️偏高',c:'tag-high'};return null}
 
 function gC(sid){
-  const fd=fDaily();const days=fd.filter(r=>r.sid===sid);
-  const bC={};days.forEach(r=>{if(!bC[r.campaign_id])bC[r.campaign_id]={id:r.campaign_id,cost:0,sales:0,orders:0,imp:0,clicks:0};const c=bC[r.campaign_id];c.cost+=Number(r.cost);c.sales+=Number(r.sales);c.orders+=r.orders;c.imp+=Number(r.impressions);c.clicks+=Number(r.clicks)});
-  return Object.values(bC).map(c=>({...c,acos:c.sales>0?c.cost/c.sales:null,roas:c.cost>0?Math.round(c.sales/c.cost*100)/100:0,cpc:c.clicks>0?Math.round(c.cost/c.clicks*100)/100:0,name:D.cN[c.id]||'SP-#'+String(c.id).slice(-6)}));
+  const fd=fDaily();const days=fd.filter(r=>Number(r.sid)===Number(sid));
+  const bC={};days.forEach(r=>{const cid=String(r.campaign_id);if(!bC[cid])bC[cid]={id:cid,cost:0,sales:0,orders:0,imp:0,clicks:0};const c=bC[cid];c.cost+=Number(r.cost);c.sales+=Number(r.sales);c.orders+=r.orders;c.imp+=Number(r.impressions);c.clicks+=Number(r.clicks)});
+  return Object.values(bC).map(c=>({...c,acos:c.sales>0?c.cost/c.sales:null,roas:c.cost>0?Math.round(c.sales/c.cost*100)/100:0,cpc:c.clicks>0?Math.round(c.cost/c.clicks*100)/100:0,name:D.cN[c.id]||'SP-#'+c.id.slice(-6)}));
 }
 
 function mkSB(ss){
   const g={};ss.forEach(s=>{if(!g[s.region])g[s.region]=[];g[s.region].push(s)});
-  return['US','CA','UK','EU'].filter(r=>g[r]).map(r=>'<span style="font-size:8px;color:'+rClr(r)+';margin:0 1px">'+r+':</span>'+g[r].sort((a,b)=>b.total_cost-a.total_cost).map(s=>'<button class="sb '+(selSid==s.sid?'on':'')+'" onclick="ss2('+s.sid+')">'+sN(s.store)+'</button>').join('')).join(' ');
+  return['US','CA','UK','EU'].filter(r=>g[r]).map(r=>'<span style="font-size:8px;color:'+rClr(r)+';margin:0 1px">'+r+':</span>'+g[r].sort((a,b)=>b.total_cost-a.total_cost).map(s=>'<button class="sb '+(Number(selSid)==Number(s.sid)?'on':'')+'" onclick="ss2('+s.sid+')">'+sN(s.store)+'</button>').join('')).join(' ');
 }
 
 function render(){
@@ -128,10 +127,11 @@ function render(){
   const tC=ss.reduce((s,r)=>s+r.total_cost,0),tS=ss.reduce((s,r)=>s+r.total_sales,0),tO=ss.reduce((s,r)=>s+r.total_orders,0);
   const[dr0,dr1]=dateRange();const now=new Date().toLocaleString('zh-CN',{timeZone:'America/Los_Angeles'});
   const totalDays=new Set(fd.map(r=>r.report_date)).size;
+  const totalSellers=D.allSellers?D.allSellers.length:89;
   D._stores=stores;D._ss=ss; // cache for tabs
 
   document.getElementById('app').innerHTML=`
-  <div class="header"><div><h1>Amazon 数据中台</h1><div class="sub"><span class="live-dot"></span>全球${stores.length}店铺 · ${dr0} → ${dr1} (${totalDays}天) · ${now}</div></div>
+  <div class="header"><div><h1>Amazon 数据中台</h1><div class="sub"><span class="live-dot"></span>全球${totalSellers}店铺(${stores.length}活跃) · ${dr0} → ${dr1} (${totalDays}天) · ${now}</div></div>
   <div class="tabs">${Object.entries(TABS).map(([k,v])=>'<button class="'+(tab===k?'on':'')+'" onclick="sw(\''+k+'\')">'+v+'</button>').join('')}</div></div>
 
   <div class="filter-row">
@@ -150,7 +150,7 @@ function render(){
   <div class="footer"><span>⚡ VPS自动同步(89店)→领星API→Supabase→Vercel</span><span>${PERIODS[selPeriod]} · ${dr0}→${dr1} · ${now}</span></div>`;
   rT();
 }
-function sw(t){tab=t;render()}function sr(r){selRegion=r;render()}function sp(p){selPeriod=p;render()}function ss2(sid){selSid=sid;render()}function ds(k){if(sK===k)sD=!sD;else{sK=k;sD=true}render()}
+function sw(t){tab=t;render()}function sr(r){selRegion=r;render()}function sp(p){selPeriod=p;load()}function ss2(sid){selSid=Number(sid);render()}function ds(k){if(sK===k)sD=!sD;else{sK=k;sD=true}render()}
 function rT(){const el=document.getElementById('tc');if(!el)return;({overview:rO,trend:rTr,campaigns:rCa,matrix:rMx,keywords:rKw,regions:rRg,sync:rSy})[tab]?.(el)}
 
 // ===== Tab 1: 总览 =====
@@ -163,8 +163,8 @@ function rO(el){
 
 // ===== Tab 2: 广告趋势 =====
 function rTr(el){
-  const ss=D._ss;const fd=fDaily().filter(r=>r.sid===selSid);
-  const bD={};fd.forEach(r=>{if(!bD[r.report_date])bD[r.report_date]={c:0,s:0,o:0};const d=bD[r.report_date];d.c+=Number(r.cost);d.s+=Number(r.sales);d.o+=r.orders});
+  const ss=D._ss;const fd=fDaily().filter(r=>Number(r.sid)===Number(selSid));
+  const bD={};fd.forEach(r=>{if(!bD[r.report_date])bD[r.report_date]={c:0,s:0,o:0};const d=bD[r.report_date];d.c+=Number(r.cost);d.s+=Number(r.sales);d.o+=Number(r.orders||0)});
   const sd=Object.entries(bD).sort((a,b)=>a[0].localeCompare(b[0]));const lb=sd.map(([d])=>d.slice(5)),co=sd.map(([,v])=>Math.round(v.c)),sl=sd.map(([,v])=>Math.round(v.s)),ac=sd.map(([,v])=>v.s>0?Math.round(v.c/v.s*1000)/10:null);
   const tC=co.reduce((s,v)=>s+v,0),tS=sl.reduce((s,v)=>s+v,0),tO=sd.reduce((s,[,v])=>s+v.o,0);
   const cur=D.sellerMap[selSid];
