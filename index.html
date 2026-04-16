@@ -48,8 +48,8 @@ th:hover{color:var(--accent)}td{padding:6px 8px;border-top:1px solid var(--borde
 <div class="wrap" id="app"><div class="loading">⏳ 连接 Supabase...</div></div>
 <script>
 const SB='https://vgdjuowhybkipjufmaco.supabase.co',SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZnZGp1b3doeWJraXBqdWZtYWNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NTcyMzUsImV4cCI6MjA5MTUzMzIzNX0.ayL75VKQpwC-AldTvQ93ulCamAZNXbH67UEHQKuSltg';
-const Q=async(t,p='')=>{const r=await fetch(`${SB}/rest/v1/${t}?${p}`,{headers:{apikey:SK,Authorization:`Bearer ${SK}`}});if(!r.ok)throw new Error(t+':'+r.status);return r.json()};
-const RPC=async(fn,body)=>{const r=await fetch(`${SB}/rest/v1/rpc/${fn}`,{method:'POST',headers:{apikey:SK,Authorization:`Bearer ${SK}`,'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error(fn+':'+r.status);return r.json()};
+const Q=async(t,p='')=>{const r=await fetch(`${SB}/rest/v1/${t}?${p}`,{headers:{apikey:SK,Authorization:`Bearer ${SK}`,Range:'0-9999'}});if(!r.ok)throw new Error(t+':'+r.status);return r.json()};
+const RPC=async(fn,body)=>{const r=await fetch(`${SB}/rest/v1/rpc/${fn}`,{method:'POST',headers:{apikey:SK,Authorization:`Bearer ${SK}`,'Content-Type':'application/json',Range:'0-9999'},body:JSON.stringify(body)});if(!r.ok)throw new Error(fn+':'+r.status);return r.json()};
 let D={},tab='overview',selRegion='ALL',selPeriod='14d',selSid=null,sK='cost',sD=true,cI=null;
 const RG={ALL:{i:'🌍',l:'全球'},US:{i:'🇺🇸',l:'美国'},CA:{i:'🇨🇦',l:'加拿大'},UK:{i:'🇬🇧',l:'英国'},EU:{i:'🇪🇺',l:'欧盟'}};
 const TABS={overview:'总览',trend:'广告趋势',campaigns:'Campaign诊断',matrix:'产品矩阵',keywords:'关键词库',regions:'区域对比',sync:'同步监控'};
@@ -80,20 +80,18 @@ function buildStores(summary){
 
 async function load(){try{
   const[dr0,dr1]=dateRange();
-  const[sellers,storeSummary,cNames,asins,kws,logs]=await Promise.all([
+  const[sellers,storeSummary,asins,kws,logs]=await Promise.all([
     Q('sellers','select=sid,name,country,has_ads'),
     RPC('get_store_summary',{p_start:dr0,p_end:dr1}),
-    RPC('get_campaign_names',{p_start:dr0,p_end:dr1}),
     Q('asin_catalog','select=asin,product_line,tier,price,rating,review_count,bsr_rank,monthly_sales,monthly_revenue,brand,status&status=eq.active&order=monthly_revenue.desc.nullslast&limit=200'),
     Q('keyword_tracker','select=keyword,product_line,search_volume,word_type,priority&order=search_volume.desc'),
     Q('sync_logs','select=*&order=created_at.desc&limit=15')
   ]);
-  const cN={};cNames.forEach(c=>{cN[String(c.campaign_id)]=c.name});
   const sellerMap={};sellers.forEach(s=>{
     const region=s.country==='美国'?'US':s.country==='加拿大'?'CA':s.country==='英国'?'UK':['德国','法国','意大利','西班牙','瑞典','爱尔兰'].includes(s.country)?'EU':s.country==='墨西哥'?'MX':'Other';
     sellerMap[s.sid]={name:s.name,region};sellerMap[String(s.sid)]={name:s.name,region};
   });
-  D={rawDaily:[],sellerMap,cN,asins,kws,logs,allSellers:sellers,storeSummary};
+  D={rawDaily:[],sellerMap,asins,kws,logs,allSellers:sellers,storeSummary};
   D._stores=buildStores(storeSummary);
   if(!selSid&&D._stores[0])selSid=D._stores[0].sid;
   render();
@@ -114,8 +112,8 @@ async function loadDaily(sid){
   D.rawDaily=data;return data;
 }
 function gC(daily){
-  const bC={};daily.forEach(r=>{const cid=String(r.campaign_id);if(!bC[cid])bC[cid]={id:cid,cost:0,sales:0,orders:0,imp:0,clicks:0};const c=bC[cid];c.cost+=Number(r.cost);c.sales+=Number(r.sales);c.orders+=Number(r.orders||0);c.imp+=Number(r.impressions);c.clicks+=Number(r.clicks)});
-  return Object.values(bC).map(c=>({...c,acos:c.sales>0?c.cost/c.sales:null,roas:c.cost>0?Math.round(c.sales/c.cost*100)/100:0,cpc:c.clicks>0?Math.round(c.cost/c.clicks*100)/100:0,name:D.cN[c.id]||'SP-#'+c.id.slice(-6)}));
+  const bC={};daily.forEach(r=>{const cid=String(r.campaign_id);if(!bC[cid])bC[cid]={id:cid,cost:0,sales:0,orders:0,imp:0,clicks:0,name:r.campaign_name||'SP-#'+cid.slice(-6)};const c=bC[cid];c.cost+=Number(r.cost);c.sales+=Number(r.sales);c.orders+=Number(r.orders||0);c.imp+=Number(r.impressions);c.clicks+=Number(r.clicks)});
+  return Object.values(bC).map(c=>({...c,acos:c.sales>0?c.cost/c.sales:null,roas:c.cost>0?Math.round(c.sales/c.cost*100)/100:0,cpc:c.clicks>0?Math.round(c.cost/c.clicks*100)/100:0}));
 }
 
 function mkSB(ss){
